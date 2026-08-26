@@ -748,17 +748,17 @@ textarea {
 
 .location-panel {
   position: absolute;
-  left: -5%;
-  width: 110%;
-  height: 36%;
+  left: -4%;
+  width: 108%;
+  height: 38%;
 }
 
 .location-panel-ceremony {
-  top: 5%;
+  top: 4%;
 }
 
 .location-panel-reception {
-  top: 59%;
+  top: 58%;
 }
 
 .location-panel-frame {
@@ -774,7 +774,7 @@ textarea {
 .location-panel-content {
   position: absolute;
   z-index: 1;
-  inset: 12% 11% 11%;
+  inset: 13% 14% 12%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -786,42 +786,42 @@ textarea {
 .location-heading {
   margin: 0;
   font-family: "Pinyon Script", "Great Vibes", cursive;
-  font-size: 3.5rem;
+  font-size: clamp(3rem, 10cqw, 3.5rem);
   font-weight: 400;
   line-height: 0.95;
 }
 
 .location-time {
-  margin: 0.75rem 0 0;
+  margin: clamp(0.5rem, 1.8cqw, 0.7rem) 0 0;
   color: #ae8429;
   font-family: "Cormorant Garamond", "Playfair Display", serif;
-  font-size: 2.45rem;
+  font-size: clamp(2rem, 6.5cqw, 2.35rem);
   font-style: italic;
   font-weight: 500;
   line-height: 1;
 }
 
 .location-place {
-  margin: 0.8rem 0 0;
+  margin: clamp(0.5rem, 1.8cqw, 0.7rem) 0 0;
   font-family: "Cormorant Garamond", "Playfair Display", serif;
-  font-size: 1.55rem;
+  font-size: clamp(1.25rem, 4.1cqw, 1.45rem);
   font-weight: 500;
   line-height: 1.1;
 }
 
 .location-link {
   display: inline-flex;
-  min-width: 12rem;
+  min-width: clamp(10.5rem, 52cqw, 11.5rem);
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: clamp(0.65rem, 2.4cqw, 0.9rem);
   border: 0.22rem solid #d9aa37;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.32);
   color: #a77d27;
-  padding: 0.22rem 1.3rem 0.3rem;
+  padding: 0.25rem 1.15rem 0.34rem;
   font-family: "Cormorant Garamond", "Playfair Display", serif;
-  font-size: 1.35rem;
+  font-size: clamp(1.1rem, 3.5cqw, 1.3rem);
   font-style: italic;
   font-weight: 500;
   line-height: 1;
@@ -1544,30 +1544,6 @@ textarea {
   .admin-table-row {
     min-width: 42rem;
   }
-}
-
-@media (max-width: 360px) {
-  .location-heading {
-    font-size: 3.1rem;
-  }
-
-  .location-time {
-    margin-top: 0.55rem;
-    font-size: 2.1rem;
-  }
-
-  .location-place {
-    margin-top: 0.55rem;
-    font-size: 1.25rem;
-  }
-
-  .location-link {
-    min-width: 10.8rem;
-    margin-top: 0.65rem;
-    border-width: 0.18rem;
-    font-size: 1.15rem;
-  }
-
 }
 
 @keyframes seal-pop {
