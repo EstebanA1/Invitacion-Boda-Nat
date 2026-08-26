@@ -124,11 +124,13 @@ Capas actuales:
 - `envelope-front.png`: parte frontal con flores y sello.
 - `envelope-seal.png`: sello con las iniciales NG.
 - `pearl-strands.png`: perlas decorativas.
-- `ornate-frame.png`: marco para la tarjeta de fecha.
+- `ornate-frame.png`: marco para la tarjeta de fecha y las ubicaciones.
 - `gold-divider.png`: separadores de la tarjeta de fecha.
 - `mint-heart-divider.png`: adorno inferior de la escena de bendición.
 - `green-oval-frame.png`: marco ovalado.
 - `mixed-flowers.png`: arreglo de flores variadas.
+- `handwritten-paper.png`: recortes manuscritos de la sección de ubicaciones.
+- `white-rose-spray.png`: rosas blancas de la sección de ubicaciones.
 - `formal-photo.jpg` y `looking-photo.jpg`: fotografías de Natalia y Gabriel.
 
 Si se reemplaza una imagen, se debe conservar el nombre del archivo o actualizar la importación correspondiente en `src/components/DigitalWeddingInvitation.tsx`. Las posiciones, tamaños y animaciones de cada capa se controlan desde `src/index.css`.
@@ -141,14 +143,17 @@ Las escenas visuales utilizan un lienzo vertical que ocupa toda la sección visi
 - Sobre abierto: clases que comienzan con `.open-envelope-`.
 - Tarjeta de fecha: clases que comienzan con `.date-card-`.
 - Fotografía ovalada: clases que comienzan con `.oval-` y `.blessing-`.
+- Ubicaciones: clases que comienzan con `.details-` y `.location-`.
+- Código de vestimenta y programa: clases que comienzan con `.dress-code-` y `.program-`.
 
 Cada escena y cada pieza importante también tiene un `id` único para seleccionarla directamente desde DevTools:
 
-- Escenas: `#scene-cover`, `#scene-envelope`, `#scene-date`, `#scene-blessing`, `#scene-details`, `#scene-countdown`, `#rsvp` y `#scene-admin`.
+- Escenas: `#scene-cover`, `#scene-envelope`, `#scene-date`, `#scene-blessing`, `#scene-details`, `#scene-countdown`, `#scene-program`, `#rsvp` y `#scene-admin`.
 - Portada: `#cover-intro`, `#cover-names`, `#cover-envelope`, `#cover-seal`, `#cover-bouquet` y `#cover-reserved`.
 - Sobre abierto: `#envelope-back`, `#envelope-photo`, `#envelope-front` y `#envelope-pearls`.
 - Tarjeta: `#date-frame`, `#date-names`, `#date-divider-main`, `#date-row`, `#date-year`, `#date-quote` y `#date-flower`.
 - Bendición: `#blessing-frame`, `#blessing-photo`, `#blessing-copy` y `#blessing-heart-divider`.
+- Programa: `#dress-code`, `#program-envelope`, `#program-frame`, `#program-seal`, `#program-title` y `#event-timeline`.
 
 Los atributos `data-scene` y `data-group` permiten filtrar grupos completos como `text`, `photo`, `envelope`, `decoration` o `interaction` sin depender del orden del DOM.
 

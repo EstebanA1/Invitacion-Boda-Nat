@@ -2,15 +2,17 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   ChevronDown,
-  ExternalLink,
+  Church,
   Loader2,
   Lock,
   Mail,
-  MapPin,
+  MoonStar,
+  Music2,
   Phone,
   Send,
   Utensils,
   Users,
+  Wine,
   XCircle,
 } from "lucide-react";
 import { Guest } from "../types";
@@ -29,6 +31,8 @@ import pearlStrands from "../../assets/invitation/layers/pearl-strands.png";
 import ornateFrame from "../../assets/invitation/layers/ornate-frame.png";
 import envelopeSeal from "../../assets/invitation/layers/envelope-seal.png";
 import mixedFlowers from "../../assets/invitation/layers/mixed-flowers.png";
+import handwrittenPaper from "../../assets/invitation/layers/handwritten-paper.png";
+import whiteRoseSpray from "../../assets/invitation/layers/white-rose-spray.png";
 import guideScene1 from "../../assets/invitation/guides/scene-1.png";
 import guideScene2 from "../../assets/invitation/guides/scene-2.png";
 import guideScene3 from "../../assets/invitation/guides/scene-3.png";
@@ -47,11 +51,11 @@ const dietaryOptions = [
 ];
 
 const schedule = [
-  { time: weddingConfig.ceremony.time, title: "Ceremonia religiosa", detail: weddingConfig.ceremony.place },
-  { time: weddingConfig.reception.time, title: "Recepción y brindis", detail: "Bienvenida junto a familia y amigos" },
-  { time: "18:00 hrs", title: "Primer vals", detail: "Apertura de la celebración" },
-  { time: "19:00 hrs", title: "Cena y banquete", detail: "Cena, postres y momentos especiales" },
-  { time: "02:30 hrs", title: "Fin de la celebración", detail: "Despedida de los novios" },
+  { time: weddingConfig.ceremony.time, title: "Ceremonia religiosa", icon: Church },
+  { time: weddingConfig.reception.time, title: "Recepción y brindis", icon: Wine },
+  { time: "18:00 hrs", title: "Primer vals", icon: Music2 },
+  { time: "19:00 hrs", title: "Cena y banquete", icon: Utensils },
+  { time: "02:30 hrs", title: "Fin de la celebración", icon: MoonStar },
 ];
 
 const locations = [
@@ -309,25 +313,25 @@ export default function DigitalWeddingInvitation() {
             <div id="date-copy" className="date-card-copy layer-reveal-delay" data-group="text">
               <div id="date-card-body" className="date-card-body">
                 <div id="date-names" className="date-card-names">
-                  <span>Natalia Aguayo</span>
-                  <small>&amp;</small>
-                  <span>Gabriel Figueiroa</span>
+                  <span id="date-bride-name" className="date-card-name date-card-name-bride">Natalia Aguayo</span>
+                  <small id="date-ampersand" className="date-card-ampersand">&amp;</small>
+                  <span id="date-groom-name" className="date-card-name date-card-name-groom">Gabriel Figueroa</span>
                 </div>
                 <img id="date-divider-main" className="date-card-main-divider" data-group="decoration" src={goldDivider} alt="" />
                 <div id="date-row" className="date-card-date">
                   <div id="date-weekday" className="date-card-side">
                     <img id="date-weekday-divider-top" className="gold-divider-sm" src={goldDivider} alt="" />
-                    <span>Sábado</span>
+                    <span id="date-weekday-label">Sábado</span>
                     <img id="date-weekday-divider-bottom" className="gold-divider-sm" src={goldDivider} alt="" />
                   </div>
-                  <strong id="date-day">28</strong>
+                  <strong id="date-day" className="date-card-day">28</strong>
                   <div id="date-month" className="date-card-side">
                     <img id="date-month-divider-top" className="gold-divider-sm" src={goldDivider} alt="" />
-                    <span>Noviembre</span>
+                    <span id="date-month-label">Noviembre</span>
                     <img id="date-month-divider-bottom" className="gold-divider-sm" src={goldDivider} alt="" />
                   </div>
                 </div>
-                <p id="date-year" className="date-card-year"><strong>2026</strong></p>
+                <p id="date-year" className="date-card-year"><strong id="date-year-label">2026</strong></p>
               </div>
               <p id="date-quote" className="date-card-quote">El amor nos unió y queremos compartir contigo el día más importante de nuestras vidas.</p>
             </div>
@@ -351,40 +355,34 @@ export default function DigitalWeddingInvitation() {
           </div>
         </section>
 
-        <section id="scene-details" className="info-section content-scene bg-envelope-paper" data-scene="details">
-          <div id="details-content" className="info-inner" data-group="content">
-            <p id="details-kicker" className="section-kicker">Los esperamos</p>
-            <h1 id="details-title" className="section-title">
-              {weddingConfig.couple.fullNames}
-            </h1>
-            <p id="details-copy" className="section-copy">
-              Dos almas, un mismo destino. Acompáñennos a celebrar el día más importante de nuestras vidas.
-            </p>
+        <section id="scene-details" className="details-scene content-scene bg-envelope-paper" data-scene="details" aria-label="Información de la ceremonia y la recepción">
+          <div id="details-canvas" className="details-composition" data-group="content">
+            <img id="details-paper-top" className="details-paper details-paper-top" data-group="decoration" src={handwrittenPaper} alt="" />
+            <img id="details-paper-bottom" className="details-paper details-paper-bottom" data-group="decoration" src={handwrittenPaper} alt="" />
 
-            <div id="details-locations" className="location-grid" data-group="locations">
+            <div id="details-locations" className="location-stack" data-group="locations">
               {locations.map((item) => (
-                <article id={`location-${item.id}`} key={item.id} className="location-card" data-group="location">
-                  <div className="location-card-body">
-                    <MapPin className="location-icon" />
-                    <div>
-                      <h2 id={`location-${item.id}-title`} className="location-heading">{item.title}</h2>
-                      <p id={`location-${item.id}-time`} className="location-time">{item.time}</p>
-                      <p id={`location-${item.id}-place`} className="location-place">{item.place}</p>
-                      <p id={`location-${item.id}-address`} className="location-address">{item.address}</p>
-                      <a
-                        id={`location-${item.id}-link`}
-                        href={item.mapUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="location-link"
-                      >
-                        Ver ubicación <ExternalLink />
-                      </a>
-                    </div>
+                <article id={`location-${item.id}`} key={item.id} className={`location-panel location-panel-${item.id}`} data-group="location">
+                  <img id={`location-${item.id}-frame`} className="location-panel-frame" data-group="frame" src={ornateFrame} alt="" />
+                  <div id={`location-${item.id}-content`} className="location-panel-content" data-group="text">
+                    <h2 id={`location-${item.id}-title`} className="location-heading">{item.title}</h2>
+                    <p id={`location-${item.id}-time`} className="location-time">{item.time}</p>
+                    <p id={`location-${item.id}-place`} className="location-place">{item.place}</p>
+                    <a
+                      id={`location-${item.id}-link`}
+                      href={item.mapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="location-link"
+                    >
+                      Ver Ubicación
+                    </a>
                   </div>
                 </article>
               ))}
             </div>
+
+            <img id="details-rose-spray" className="details-rose-spray" data-group="decoration" src={whiteRoseSpray} alt="" />
           </div>
         </section>
 
@@ -399,17 +397,41 @@ export default function DigitalWeddingInvitation() {
                 <StatCard id="countdown-seconds" label="Seg" value={String(countdown.seconds).padStart(2, "0")} />
               </div>
             </div>
+          </div>
+        </section>
 
-            <div id="event-timeline" className="timeline" data-group="timeline">
-              {schedule.map((item, index) => (
-                <div id={`timeline-item-${index + 1}`} key={`${item.time}-${item.title}`} className="timeline-row">
-                  <span className="timeline-time">{item.time}</span>
-                  <div>
-                    <h3 className="timeline-title">{item.title}</h3>
-                    <p className="timeline-detail">{item.detail}</p>
-                  </div>
+        <section id="scene-program" className="program-scene content-scene bg-envelope-paper" data-scene="program">
+          <div id="program-canvas" className="program-composition" data-group="content">
+            <div id="dress-code" className="dress-code" data-group="text">
+              <p id="dress-code-kicker" className="dress-code-kicker">Dress Code</p>
+              <h2 id="dress-code-title" className="dress-code-title">Elegante</h2>
+              <p id="dress-code-copy" className="dress-code-copy">
+                Te pedimos  NO  utilizar color blanco, ya que es exclusivamente de la novia y evitar usar amarillo pastel y beige, gracias.
+              </p>
+            </div>
+
+            <img id="program-envelope" className="program-envelope" data-group="decoration" src={greenEnvelope} alt="" />
+            <div id="program-card-group" className="program-card-group" data-group="program-card">
+              <img id="program-frame" className="program-frame" data-group="frame" src={ornateFrame} alt="" />
+              <img id="program-seal" className="program-seal" data-group="decoration" src={envelopeSeal} alt="" />
+
+              <div id="program-content" className="program-content" data-group="timeline">
+                <h2 id="program-title" className="program-title">Programa</h2>
+                <div id="event-timeline" className="program-timeline">
+                  {schedule.map((item, index) => {
+                    const Icon = item.icon;
+                    return (
+                      <div id={`timeline-item-${index + 1}`} key={`${item.time}-${item.title}`} className="program-row">
+                        <span className="program-icon" aria-hidden="true"><Icon /></span>
+                        <div className="program-row-copy">
+                          <time className="program-time">{item.time}</time>
+                          <h3 className="program-event">{item.title}</h3>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </section>

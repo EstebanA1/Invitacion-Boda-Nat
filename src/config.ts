@@ -12,16 +12,16 @@ export const weddingConfig = {
   ceremony: {
     title: "Ceremonia",
     time: "14:30 hrs",
-    place: "Parroquia / IEP Coronel",
+    place: "IEP. Lagunillas Coronel",
     address: "Confirma la dirección oficial antes de publicar",
-    mapUrl: "https://maps.google.com/?q=Coronel%2C%20Chile",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=IEP%20Lagunillas%20Coronel",
   },
   reception: {
     title: "Recepción",
     time: "16:30 hrs",
-    place: "Recepción y celebración",
+    place: "Verde Ocaso Lounge",
     address: "Confirma la dirección oficial antes de publicar",
-    mapUrl: "https://maps.google.com/?q=Coronel%2C%20Chile",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Verde%20Ocaso%20Lounge%20Coronel",
   },
   rsvp: {
     deadline: "1 de Noviembre de 2026",

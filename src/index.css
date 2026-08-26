@@ -151,14 +151,14 @@ textarea {
 }
 
 .cover-names {
-  top: 23.5%;
+  top: 25.5%;
   display: flex;
   align-items: baseline;
   justify-content: center;
   gap: 0.35rem;
   color: #4d4a45;
   font-family: "Pinyon Script", cursive;
-  font-size: 8.2cqw;
+  font-size: 10cqw;
   line-height: 0.9;
   white-space: nowrap;
 }
@@ -269,16 +269,28 @@ textarea {
 }
 
 /* Escena 3: tarjeta de fecha */
+#scene-date {
+  --date-scene-width: min(100vw, 33.75rem);
+  --date-scene-height: min(60rem, 177.7778vw);
+  --date-scene-footer: clamp(1rem, 3vw, 2rem);
+  min-height: max(100svh, calc(var(--date-scene-height) + var(--date-scene-footer)));
+  overflow: hidden;
+}
+
 .date-card-composition {
+  width: var(--date-scene-width);
+  height: var(--date-scene-height);
   overflow: visible;
+  container-type: size;
 }
 
 .date-card-frame {
   z-index: 1;
-  top: 5.5%;
-  left: 3%;
-  width: 94%;
-  height: 74%;
+  top: -7.5cqh;
+  left: -8cqw;
+  width: 116cqw;
+  max-width: none;
+  height: 99cqh;
   object-fit: fill;
 }
 
@@ -290,56 +302,58 @@ textarea {
   text-align: center;
 }
 
-/* Contenido interno del marco: relleno vertical proporcional. */
 .date-card-body {
   position: absolute;
-  top: 10%;
-  left: 10%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
+  inset: 0;
   box-sizing: border-box;
-  width: 80%;
-  height: 60%;
-  padding-block: 2% 3%;
 }
 
 .date-card-names {
-  position: relative;
+  position: absolute;
+  top: 16cqh;
+  left: 9cqw;
   display: grid;
-  margin-top: 10%;
-  width: 100%;
-  gap: 0.4cqw;
+  width: 82cqw;
+  gap: 5cqh;
   font-family: "Pinyon Script", cursive;
-  font-size: 8.6cqw;
-  line-height: 0.9;
+  font-size: clamp(2.15rem, 12.5cqw, 4.2rem);
+  line-height: 0.92;
+  text-align: center;
 }
 
-.date-card-names small {
+.date-card-name,
+.date-card-ampersand {
+  display: block;
+}
+
+.date-card-ampersand {
   font-family: "Cormorant Garamond", serif;
-  font-size: 3.8cqw;
+  font-size: clamp(1.1rem, 5.2cqw, 2rem);
   font-style: italic;
+  line-height: 0.8;
 }
 
 .date-card-main-divider {
-  position: relative !important;
-  width: 72%;
-  height: 2.2cqw;
-  flex-shrink: 0;
+  position: absolute !important;
+  top: 46.5cqh;
+  left: 22cqw;
+  width: 56cqw;
+  height: 1.55cqw;
   object-fit: fill;
 }
 
 .date-card-date {
-  position: relative;
+  position: absolute;
+  top: 53cqh;
+  left: 11cqw;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   column-gap: 0;
-  width: 90%;
+  width: 78cqw;
   color: #4d4a45;
   font-family: "Cormorant Garamond", serif;
-  font-size: 4.7cqw;
+  font-size: clamp(1rem, 5.2cqw, 1.85rem);
 }
 
 .date-card-side {
@@ -350,8 +364,8 @@ textarea {
 
 .gold-divider-sm {
   position: relative !important;
-  width: 92%;
-  height: 1.2cqw;
+  width: 96%;
+  height: 1cqw;
   max-width: 8rem;
   object-fit: fill;
 }
@@ -363,18 +377,22 @@ textarea {
   justify-content: flex-start;
   color: #d1a42f;
   font-family: "Cormorant Garamond", serif;
-  font-size: 15.2cqw;
+  font-size: clamp(2.75rem, 15.2cqw, 5rem);
   font-weight: 500;
   line-height: 0.85;
 }
 
 .date-card-year {
-  position: relative;
-  width: 100%;
+  position: absolute;
+  top: 65.5cqh;
+  left: 0;
+  width: 100cqw;
   margin: 0;
   color: #4d4a45;
   font-family: "Cormorant Garamond", serif;
-  font-size: 7.2cqw;
+  font-size: clamp(1.5rem, 8.3cqw, 2.7rem);
+  line-height: 1;
+  text-align: center;
 }
 
 .date-card-year strong {
@@ -384,27 +402,26 @@ textarea {
 
 .date-card-quote {
   position: absolute;
-  top: 78%;
-  left: 15%;
-  width: 70%;
+  top: 85cqh;
+  left: 26cqw;
+  width: 56cqw;
   margin: 0;
-  padding-inline: 5.5cqw;
   color: #4d4a45;
   font-family: "Cormorant Garamond", serif;
-  font-size: 4.2cqw;
+  font-size: clamp(0.9rem, 4.4cqw, 1.5rem);
   font-style: italic;
-  line-height: 1.45;
-  text-align: center;
+  line-height: 1.35;
+  text-align: left;
 }
 
 .date-card-flower {
   z-index: 3;
-  top: 54%;
-  left: 0;
-  width: 20%;
-  height: 24%;
+  top: 64.5cqh;
+  left: -10cqw;
+  width: 48cqw;
+  height: 43cqh;
   object-fit: fill;
-  transform: rotate(5deg);
+  transform: rotate(3deg);
 }
 
 /* Escena 4: bendición y fotografía */
@@ -682,14 +699,156 @@ textarea {
   font-size: 0.92rem;
 }
 
-.location-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 2.5rem;
+.details-scene {
+  --details-height: max(100svh, min(50rem, calc(min(100vw, 33.75rem) * 1.7778)));
+  position: relative;
+  min-height: var(--details-height);
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+  background: #f3f2f2;
 }
 
-.location-card,
+.details-composition {
+  position: relative;
+  width: min(100%, 33.75rem);
+  height: var(--details-height);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.details-paper {
+  position: absolute;
+  z-index: 0;
+  width: 58%;
+  height: 27%;
+  object-fit: cover;
+  opacity: 0.66;
+  mix-blend-mode: multiply;
+  clip-path: polygon(0 5%, 7% 1%, 14% 4%, 22% 0, 30% 4%, 39% 1%, 48% 5%, 58% 1%, 67% 4%, 76% 0, 86% 4%, 94% 1%, 100% 5%, 98% 95%, 91% 99%, 82% 96%, 73% 100%, 63% 96%, 53% 99%, 44% 95%, 34% 100%, 24% 96%, 14% 99%, 6% 95%);
+}
+
+.details-paper-top {
+  top: -4%;
+  left: -20%;
+  rotate: -2deg;
+}
+
+.details-paper-bottom {
+  top: 48%;
+  right: -22%;
+  rotate: 3deg;
+}
+
+.location-stack {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+.location-panel {
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  height: 36%;
+}
+
+.location-panel-ceremony {
+  top: 5%;
+}
+
+.location-panel-reception {
+  top: 59%;
+}
+
+.location-panel-frame {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  filter: drop-shadow(0 0.55rem 0.4rem rgba(55, 58, 55, 0.2));
+}
+
+.location-panel-content {
+  position: absolute;
+  z-index: 1;
+  inset: 12% 11% 11%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #171716;
+  text-align: center;
+}
+
+.location-heading {
+  margin: 0;
+  font-family: "Pinyon Script", "Great Vibes", cursive;
+  font-size: 3.5rem;
+  font-weight: 400;
+  line-height: 0.95;
+}
+
+.location-time {
+  margin: 0.75rem 0 0;
+  color: #ae8429;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: 2.45rem;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.location-place {
+  margin: 0.8rem 0 0;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: 1.55rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.location-link {
+  display: inline-flex;
+  min-width: 12rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  border: 0.22rem solid #d9aa37;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.32);
+  color: #a77d27;
+  padding: 0.22rem 1.3rem 0.3rem;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: 1.35rem;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.location-link:hover,
+.location-link:focus-visible {
+  border-color: #bc8e2e;
+  background: rgba(241, 222, 175, 0.42);
+  color: #7c5a1a;
+}
+
+.details-rose-spray {
+  position: absolute;
+  z-index: 3;
+  top: 37%;
+  left: -4%;
+  width: 40%;
+  height: 39%;
+  object-fit: contain;
+  object-position: left center;
+  filter: drop-shadow(0 0.55rem 0.45rem rgba(63, 74, 60, 0.16));
+  pointer-events: none;
+}
+
 .rsvp-panel,
 .admin-table {
   border: 1px solid #ded4c7;
@@ -698,24 +857,6 @@ textarea {
   box-shadow: 0 12px 32px rgba(77, 74, 69, 0.1);
 }
 
-.location-card {
-  padding: 1.25rem;
-  text-align: left;
-}
-
-.location-card-body {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.location-icon {
-  margin-top: 0.25rem;
-  color: #7aa99d;
-}
-
-.location-heading,
-.timeline-time,
 .stat-label {
   font-family: "Cinzel", serif;
   font-size: 0.72rem;
@@ -723,27 +864,6 @@ textarea {
   text-transform: uppercase;
 }
 
-.location-time {
-  margin: 0.45rem 0 0;
-  color: #6d685f;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1.7rem;
-}
-
-.location-place,
-.location-address {
-  margin: 0.45rem 0 0;
-  color: #726a60;
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-.location-address {
-  color: #8b8378;
-  font-size: 0.78rem;
-}
-
-.location-link,
 .secondary-button,
 .primary-button {
   display: inline-flex;
@@ -758,7 +878,6 @@ textarea {
   transition: background-color 180ms ease, border-color 180ms ease, opacity 180ms ease;
 }
 
-.location-link,
 .secondary-button {
   margin-top: 1rem;
   border: 1px solid #cfc3b4;
@@ -768,7 +887,6 @@ textarea {
   font-size: 0.72rem;
 }
 
-.location-link:hover,
 .secondary-button:hover {
   background: #f2ece3;
 }
@@ -785,7 +903,7 @@ textarea {
   border: 1px solid #ded4c7;
   border-radius: 0.5rem;
   background: rgba(255, 255, 255, 0.78);
-  padding: 0.85rem 0.5rem;
+  padding: 0.75rem 0.5rem 1rem;
   text-align: center;
   box-shadow: 0 8px 20px rgba(77, 74, 69, 0.08);
 }
@@ -799,48 +917,194 @@ textarea {
 
 .stat-value {
   display: block;
-  margin-top: 0.25rem;
+  margin-top: 0.12rem;
   color: #4d4a45;
   font-family: "Cormorant Garamond", serif;
   font-size: clamp(1.8rem, 8vw, 2.35rem);
   font-weight: 600;
   line-height: 1;
+  translate: 0 -0.12rem;
 }
 
-.timeline {
-  width: min(100%, 36rem);
-  margin: 3rem auto 0;
+.program-scene {
+  --program-width: min(100vw, 33.75rem);
+  --program-height: min(60rem, 177.7778vw);
+  --program-footer-space: clamp(1.5rem, 4vw, 3rem);
+  position: relative;
+  min-height: max(100svh, calc(var(--program-height) + var(--program-footer-space)));
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+  background: #f3f2f2;
 }
 
-.timeline-row {
-  display: grid;
-  grid-template-columns: 5.6rem minmax(0, 1fr);
-  gap: 1rem;
-  border-left: 1px solid #cfc8bd;
-  padding: 0 0 1.75rem 1.25rem;
+.program-composition {
+  --program-group-shift: clamp(-5rem, calc(20.5rem - 100cqw), 0rem);
+  --program-card-offset-x: 0rem;
+  --program-card-offset-y: 0rem;
+  position: relative;
+  width: var(--program-width);
+  height: var(--program-height);
+  overflow: visible;
+  isolation: isolate;
+  container-type: size;
 }
 
-.timeline-row:last-child {
-  padding-bottom: 0;
+.dress-code {
+  position: absolute;
+  z-index: 3;
+  top: 2.5cqh;
+  left: 7cqw;
+  width: 86cqw;
+  color: #181716;
+  text-align: center;
 }
 
-.timeline-time {
-  color: #7aa99d;
-  font-size: 0.76rem;
-}
-
-.timeline-title {
+.dress-code-kicker {
   margin: 0;
-  color: #5b554e;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 1.25rem;
-  font-weight: 600;
+  color: #d0a032;
+  font-family: "Pinyon Script", "Great Vibes", cursive;
+  font-size: clamp(3.1rem, 11.2cqw, 4.2rem);
+  font-weight: 400;
+  line-height: 0.95;
 }
 
-.timeline-detail {
-  margin: 0.25rem 0 0;
-  color: #7d7469;
-  font-size: 0.9rem;
+.dress-code-title {
+  margin: clamp(0.45rem, 1.6cqw, 0.65rem) 0 0;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: clamp(1.85rem, 6.25cqw, 2.35rem);
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.dress-code-copy {
+  margin: clamp(1rem, 5cqw, 1.75rem) 0 0;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: clamp(1.15rem, 4.1cqw, 1.55rem);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.program-envelope {
+  position: absolute;
+  z-index: 1;
+  top: 36.5cqh;
+  left: 5cqw;
+  width: 90cqw;
+  height: 32cqh;
+  object-fit: fill;
+  translate: 0 var(--program-group-shift);
+  filter: drop-shadow(0 0.5rem 0.35rem rgba(54, 73, 67, 0.18));
+}
+
+.program-card-group {
+  position: absolute;
+  z-index: 2;
+  margin-top: 7%;
+  inset: 0;
+  translate: var(--program-card-offset-x) calc(var(--program-group-shift) + var(--program-card-offset-y));
+}
+
+.program-frame {
+  position: absolute;
+  z-index: 2;
+  top: 40.5cqh;
+  left: -4cqw;
+  width: 108cqw;
+  max-width: none;
+  height: 63cqh;
+  object-fit: fill;
+  filter: drop-shadow(0 0.55rem 0.45rem rgba(68, 66, 62, 0.16));
+}
+
+.program-seal {
+  position: absolute;
+  z-index: 4;
+  top: 42.5cqh;
+  left: 39.5cqw;
+  width: 21cqw;
+  height: 13cqh;
+  object-fit: contain;
+  filter: drop-shadow(0 0.35rem 0.35rem rgba(77, 65, 56, 0.18));
+}
+
+.program-content {
+  position: absolute;
+  z-index: 3;
+  top: 53.5cqh;
+  left: 16cqw;
+  width: 68cqw;
+  height: 43cqh;
+  color: #6f675e;
+}
+
+.program-title {
+  margin: 0;
+  color: #171615;
+  font-family: "Pinyon Script", "Great Vibes", cursive;
+  font-size: clamp(2.5rem, 12cqw, 3.8rem);
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+.program-timeline {
+  display: grid;
+  gap: clamp(0.3rem, 1.25cqw, 0.45rem);
+  width: 90%;
+  margin: clamp(0.7rem, 2.5cqw, 0.9rem) auto 0;
+}
+
+.program-row {
+  display: grid;
+  grid-template-columns: clamp(1.65rem, 7cqw, 2.65rem) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.4rem, 2.2cqw, 0.8rem);
+  min-height: clamp(1.65rem, 7.2cqw, 2.5rem);
+  text-align: left;
+}
+
+.program-icon {
+  display: inline-flex;
+  width: clamp(1.65rem, 7cqw, 2.5rem);
+  height: clamp(1.65rem, 7cqw, 2.5rem);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(191, 151, 59, 0.5);
+  border-radius: 50%;
+  background: rgba(220, 245, 237, 0.8);
+  color: #548d7e;
+}
+
+.program-icon svg {
+  width: clamp(0.9rem, 3.6cqw, 1.35rem);
+  height: clamp(0.9rem, 3.6cqw, 1.35rem);
+}
+
+.program-row:nth-child(even) .program-icon {
+  background: rgba(249, 238, 208, 0.76);
+  color: #ad842c;
+}
+
+.program-time {
+  display: block;
+  color: #9e8e76;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: clamp(0.7rem, 3cqw, 1.05rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.program-event {
+  margin: 0.18rem 0 0;
+  color: #8a7f70;
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  font-size: clamp(0.78rem, 3.35cqw, 1.18rem);
+  font-weight: 500;
+  line-height: 1.05;
 }
 
 .rsvp-panel {
@@ -1078,6 +1342,10 @@ textarea {
   scroll-snap-align: start;
 }
 
+.content-scene.program-scene {
+  min-height: max(100svh, calc(var(--program-height) + var(--program-footer-space)));
+}
+
 .bg-cover-paper {
   background: #f4f3f5;
 }
@@ -1244,7 +1512,6 @@ textarea {
     padding: 3.5rem 1rem;
   }
 
-  .location-grid,
   .form-grid,
   .admin-stats,
   .admin-notes {
@@ -1257,18 +1524,12 @@ textarea {
   }
 
   .stat-card {
-    padding: 0.75rem 0.25rem;
+    padding: 0.68rem 0.25rem 0.9rem;
   }
 
   .stat-label {
     font-size: 0.56rem;
     letter-spacing: 0.12em;
-  }
-
-  .timeline-row {
-    grid-template-columns: 4.8rem minmax(0, 1fr);
-    gap: 0.75rem;
-    padding-left: 1rem;
   }
 
   .choice-grid,
@@ -1283,6 +1544,30 @@ textarea {
   .admin-table-row {
     min-width: 42rem;
   }
+}
+
+@media (max-width: 360px) {
+  .location-heading {
+    font-size: 3.1rem;
+  }
+
+  .location-time {
+    margin-top: 0.55rem;
+    font-size: 2.1rem;
+  }
+
+  .location-place {
+    margin-top: 0.55rem;
+    font-size: 1.25rem;
+  }
+
+  .location-link {
+    min-width: 10.8rem;
+    margin-top: 0.65rem;
+    border-width: 0.18rem;
+    font-size: 1.15rem;
+  }
+
 }
 
 @keyframes seal-pop {
