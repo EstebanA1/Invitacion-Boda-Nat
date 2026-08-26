@@ -16,11 +16,24 @@ import {
 import { Guest } from "../types";
 import { weddingConfig } from "../config";
 
-import coverOne from "../../assets/invitation/cover-1.png";
-import coverTwo from "../../assets/invitation/cover-2.png";
-import envelopePhoto from "../../assets/invitation/envelope-photo.png";
-import dateCard from "../../assets/invitation/date-card.png";
-import blessing from "../../assets/invitation/blessing.png";
+import whiteFlowers from "../../assets/invitation/layers/white-flowers.png";
+import greenEnvelope from "../../assets/invitation/layers/green-envelope.png";
+import envelopeBack from "../../assets/invitation/layers/envelope-back.png";
+import envelopeFront from "../../assets/invitation/layers/envelope-front.png";
+import goldDivider from "../../assets/invitation/layers/gold-divider.png";
+import mintHeartDivider from "../../assets/invitation/layers/mint-heart-divider.png";
+import greenOvalFrame from "../../assets/invitation/layers/green-oval-frame.png";
+import formalPhoto from "../../assets/invitation/layers/formal-photo.jpg";
+import lookingPhoto from "../../assets/invitation/layers/looking-photo.jpg";
+import pearlStrands from "../../assets/invitation/layers/pearl-strands.png";
+import ornateFrame from "../../assets/invitation/layers/ornate-frame.png";
+import envelopeSeal from "../../assets/invitation/layers/envelope-seal.png";
+import mixedFlowers from "../../assets/invitation/layers/mixed-flowers.png";
+import guideScene1 from "../../assets/invitation/guides/scene-1.png";
+import guideScene2 from "../../assets/invitation/guides/scene-2.png";
+import guideScene3 from "../../assets/invitation/guides/scene-3.png";
+import guideScene4 from "../../assets/invitation/guides/scene-4.png";
+import guideScene5 from "../../assets/invitation/guides/scene-5.png";
 
 type Attendance = Guest["attendance"];
 
@@ -41,6 +54,11 @@ const schedule = [
   { time: "02:30 hrs", title: "Fin de la celebración", detail: "Despedida de los novios" },
 ];
 
+const locations = [
+  { id: "ceremony", ...weddingConfig.ceremony },
+  { id: "reception", ...weddingConfig.reception },
+];
+
 function getInvitationType(): "1" | "2" {
   const params = new URLSearchParams(window.location.search);
   return params.get("inv") === "2" ? "2" : "1";
@@ -48,6 +66,10 @@ function getInvitationType(): "1" | "2" {
 
 function getAdminKey(): string | null {
   return new URLSearchParams(window.location.search).get("admin");
+}
+
+function getGuideMode(): boolean {
+  return new URLSearchParams(window.location.search).get("guide") === "1";
 }
 
 function getStoredGuests(): Guest[] {
@@ -124,22 +146,11 @@ function useCountdown() {
   }, [now]);
 }
 
-function SceneImage({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+function StatCard({ id, label, value }: { id: string; label: string; value: string | number }) {
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={`scene-image w-full max-w-[540px] object-contain ${className}`}
-      loading="lazy"
-    />
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="stat-card rounded-lg border border-[#ded4c7] bg-white/78 px-4 py-3 text-center shadow-sm">
-      <span className="stat-label block font-cinzel text-[10px] uppercase tracking-[0.18em] text-[#7c776d]">{label}</span>
-      <strong className="stat-value mt-1 block font-serif text-3xl font-semibold text-[#4d4a45]">{value}</strong>
+    <div id={id} className="stat-card" data-group="stat">
+      <span className="stat-label">{label}</span>
+      <strong className="stat-value">{value}</strong>
     </div>
   );
 }
@@ -147,10 +158,30 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
 export default function DigitalWeddingInvitation() {
   const invitationType = getInvitationType();
   const isAdmin = getAdminKey() === weddingConfig.rsvp.adminKey;
+  const guideMode = getGuideMode();
   const countdown = useCountdown();
   const [guests, setGuests] = useState<Guest[]>(() => getStoredGuests());
   const [remoteLoaded, setRemoteLoaded] = useState(false);
+  const [isPopping, setIsPopping] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
+
+  useEffect(() => {
+    const targetId = window.location.hash.slice(1);
+    if (!targetId) return;
+
+    window.requestAnimationFrame(() => {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+
+      const root = document.documentElement;
+      const previousBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+      target.scrollIntoView({ block: "start" });
+      window.requestAnimationFrame(() => {
+        root.style.scrollBehavior = previousBehavior;
+      });
+    });
+  }, []);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -187,91 +218,167 @@ export default function DigitalWeddingInvitation() {
   };
 
   const openInvitation = () => {
-    if (isOpening) return;
-    setIsOpening(true);
+    if (isOpening || isPopping) return;
+    setIsPopping(true);
     window.setTimeout(() => {
-      document.getElementById("inicio")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.setTimeout(() => setIsOpening(false), 700);
-    }, 760);
+      setIsPopping(false);
+      setIsOpening(true);
+      window.setTimeout(() => {
+        document.getElementById("scene-envelope")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.setTimeout(() => setIsOpening(false), 700);
+      }, 760);
+    }, 430);
   };
 
   return (
-    <div className="wedding-invitation min-h-screen bg-[#f3f2f1] text-[#4d4a45]">
+    <div id="wedding-invitation" className="wedding-invitation">
       <a
+        id="quick-rsvp-button"
         href="#rsvp"
-        className="quick-rsvp fixed bottom-5 left-5 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#d8cdbf] bg-white/90 text-[#607d75] shadow-lg backdrop-blur transition hover:scale-105"
+        className="quick-rsvp"
+        data-group="navigation"
         aria-label="Confirmar asistencia"
         title="Confirmar asistencia"
       >
-        <Mail className="h-5 w-5" />
+        <Mail />
       </a>
 
-      <main className="invitation-scroll">
-        <section className="invitation-scene relative bg-cover-paper">
-          <div className="absolute inset-0 bg-paper-glow" />
+      <main id="invitation-content" className="invitation-scroll">
+        <section id="scene-cover" className="invitation-scene bg-cover-paper" data-scene="cover">
+          <div id="cover-background" className="bg-paper-glow" data-group="background" />
           <button
+            id="cover-open-button"
             type="button"
             onClick={openInvitation}
-            className={`opening-card relative block w-full max-w-[540px] cursor-pointer border-0 bg-transparent p-0 text-left transition-transform duration-300 hover:scale-[1.01] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#9bcfc3]/50 ${
-              isOpening ? "is-opening" : ""
-            }`}
+            className={`opening-card${isOpening ? " is-opening" : ""}`}
+            data-group="interaction"
             aria-label="Abrir invitación"
           >
-            <SceneImage
-              src={invitationType === "2" ? coverTwo : coverOne}
-              alt={`Invitación para ${invitationType} ${invitationType === "1" ? "lugar" : "lugares"}`}
-              className="max-h-[94svh]"
-            />
+            <div id="cover-canvas" className="layered-scene cover-composition" aria-hidden="true">
+              <img id="cover-flower-top" className="cover-floral cover-floral-top" data-group="decoration" src={whiteFlowers} alt="" />
+              <div id="cover-intro" className="cover-intro" data-group="text">
+                <span>Estás cordialmente invitado</span>
+                <span>a la boda de</span>
+              </div>
+              <div id="cover-names" className="cover-names" data-group="text">
+                <span>Natalia</span>
+                <small>&amp;</small>
+                <span>Gabriel</span>
+              </div>
+              <img id="cover-envelope" className="cover-envelope" data-group="envelope" src={greenEnvelope} alt="" />
+              <img id="cover-seal" className={`cover-seal${isPopping ? " is-popping" : ""}`} data-group="envelope" src={envelopeSeal} alt="" />
+              <img id="cover-bouquet" className="cover-bouquet" data-group="decoration" src={mixedFlowers} alt="" />
+              <div id="cover-reserved" className="cover-reserved" data-group="text">
+                <span>Hemos reservado</span>
+                <strong>{invitationType}</strong>
+                <span>{invitationType === "1" ? "lugar en tu honor" : "lugares en tu honor"}</span>
+              </div>
+              <img id="cover-flower-bottom" className="cover-floral cover-floral-bottom" data-group="decoration" src={whiteFlowers} alt="" />
+              {guideMode && (
+                <img id="cover-guide" className="scene-guide" data-group="guide" src={invitationType === "2" ? guideScene2 : guideScene1} alt="" />
+              )}
+            </div>
           </button>
           <button
+            id="cover-open-hint"
             type="button"
             onClick={openInvitation}
-            className="open-hint absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 font-cinzel text-[10px] uppercase tracking-[0.25em] text-[#77736c]"
+            className="open-hint"
+            data-group="interaction"
           >
             Abrir invitación
-            <ChevronDown className="h-4 w-4 animate-bounce" />
+            <ChevronDown className="open-hint-icon" />
           </button>
         </section>
 
-        <section id="inicio" className="invitation-scene bg-envelope-paper">
-          <SceneImage src={envelopePhoto} alt="Sobre abierto con foto de Natalia y Gabriel" className="animate-float-in" />
+        <section id="scene-envelope" className="invitation-scene bg-envelope-paper" data-scene="envelope">
+          <div id="envelope-canvas" className="layered-scene open-envelope-composition">
+            <img id="envelope-back" className="open-envelope-back layer-reveal" data-group="envelope" src={envelopeBack} alt="Sobre abierto" />
+            <div id="envelope-photo-frame" className="open-envelope-photo-frame layer-reveal-delay" data-group="photo">
+              <img id="envelope-photo" src={lookingPhoto} alt="Natalia y Gabriel mirándose" />
+            </div>
+            <img id="envelope-front" className="open-envelope-front layer-reveal-late" data-group="envelope" src={envelopeFront} alt="" />
+            <img id="envelope-pearls" className="open-envelope-pearls layer-reveal-delay" data-group="decoration" src={pearlStrands} alt="" />
+            {guideMode && <img id="envelope-guide" className="scene-guide" data-group="guide" src={guideScene3} alt="" />}
+          </div>
         </section>
 
-        <section className="invitation-scene bg-date-paper">
-          <SceneImage src={dateCard} alt="Fecha de la boda de Natalia y Gabriel" className="animate-soft-zoom" />
+        <section id="scene-date" className="invitation-scene bg-date-paper" data-scene="date">
+          <div id="date-canvas" className="layered-scene date-card-composition">
+            <img id="date-frame" className="date-card-frame layer-reveal" data-group="frame" src={ornateFrame} alt="Marco decorativo" />
+            <div id="date-copy" className="date-card-copy layer-reveal-delay" data-group="text">
+              <div id="date-card-body" className="date-card-body">
+                <div id="date-names" className="date-card-names">
+                  <span>Natalia Aguayo</span>
+                  <small>&amp;</small>
+                  <span>Gabriel Figueiroa</span>
+                </div>
+                <img id="date-divider-main" className="date-card-main-divider" data-group="decoration" src={goldDivider} alt="" />
+                <div id="date-row" className="date-card-date">
+                  <div id="date-weekday" className="date-card-side">
+                    <img id="date-weekday-divider-top" className="gold-divider-sm" src={goldDivider} alt="" />
+                    <span>Sábado</span>
+                    <img id="date-weekday-divider-bottom" className="gold-divider-sm" src={goldDivider} alt="" />
+                  </div>
+                  <strong id="date-day">28</strong>
+                  <div id="date-month" className="date-card-side">
+                    <img id="date-month-divider-top" className="gold-divider-sm" src={goldDivider} alt="" />
+                    <span>Noviembre</span>
+                    <img id="date-month-divider-bottom" className="gold-divider-sm" src={goldDivider} alt="" />
+                  </div>
+                </div>
+                <p id="date-year" className="date-card-year"><strong>2026</strong></p>
+              </div>
+              <p id="date-quote" className="date-card-quote">El amor nos unió y queremos compartir contigo el día más importante de nuestras vidas.</p>
+            </div>
+            <img id="date-flower" className="date-card-flower layer-reveal-late" data-group="decoration" src={mixedFlowers} alt="" />
+            {guideMode && <img id="date-guide" className="scene-guide" data-group="guide" src={guideScene4} alt="" />}
+          </div>
         </section>
 
-        <section className="invitation-scene bg-mint-photo">
-          <SceneImage src={blessing} alt="Natalia y Gabriel con la bendición de Dios" className="animate-float-in" />
+        <section id="scene-blessing" className="invitation-scene bg-mint-photo" data-scene="blessing">
+          <div id="blessing-canvas" className="layered-scene blessing-composition">
+            <img id="blessing-frame" className="oval-frame layer-reveal" data-group="frame" src={greenOvalFrame} alt="Marco ovalado verde" />
+            <div id="blessing-photo-frame" className="oval-photo-frame layer-reveal-delay" data-group="photo">
+              <img id="blessing-photo" src={formalPhoto} alt="Natalia y Gabriel" />
+            </div>
+            <div id="blessing-copy" className="blessing-copy layer-reveal-late" data-group="text">
+              <span>Con la bendición de Dios y<br />de nuestras familias</span>
+              <strong>¡Nos casamos!</strong>
+            </div>
+            <img id="blessing-heart-divider" className="blessing-heart-divider" data-group="decoration" src={mintHeartDivider} alt="" />
+            {guideMode && <img id="blessing-guide" className="scene-guide" data-group="guide" src={guideScene5} alt="" />}
+          </div>
         </section>
 
-        <section className="info-section content-scene bg-envelope-paper px-5 py-16 sm:py-20">
-          <div className="info-inner mx-auto max-w-3xl text-center">
-            <p className="section-kicker font-script text-4xl text-[#7b8f87] sm:text-5xl">Los esperamos</p>
-            <h1 className="section-title mt-3 font-cinzel text-2xl uppercase tracking-[0.16em] text-[#4d4a45] sm:text-4xl">
+        <section id="scene-details" className="info-section content-scene bg-envelope-paper" data-scene="details">
+          <div id="details-content" className="info-inner" data-group="content">
+            <p id="details-kicker" className="section-kicker">Los esperamos</p>
+            <h1 id="details-title" className="section-title">
               {weddingConfig.couple.fullNames}
             </h1>
-            <p className="section-copy mx-auto mt-5 max-w-xl font-serif text-xl leading-relaxed text-[#756e64]">
+            <p id="details-copy" className="section-copy">
               Dos almas, un mismo destino. Acompáñennos a celebrar el día más importante de nuestras vidas.
             </p>
 
-            <div className="location-grid mt-10 grid gap-4 sm:grid-cols-2">
-              {[weddingConfig.ceremony, weddingConfig.reception].map((item) => (
-                <article key={item.title} className="location-card rounded-lg border border-[#ded4c7] bg-white/72 p-5 text-left shadow-sm">
-                  <div className="location-card-body flex items-start gap-3">
-                    <MapPin className="location-icon mt-1 h-5 w-5 shrink-0 text-[#7aa99d]" />
+            <div id="details-locations" className="location-grid" data-group="locations">
+              {locations.map((item) => (
+                <article id={`location-${item.id}`} key={item.id} className="location-card" data-group="location">
+                  <div className="location-card-body">
+                    <MapPin className="location-icon" />
                     <div>
-                      <h2 className="location-heading font-cinzel text-sm uppercase tracking-[0.14em]">{item.title}</h2>
-                      <p className="location-time mt-2 font-serif text-2xl text-[#6d685f]">{item.time}</p>
-                      <p className="location-place mt-2 text-sm leading-relaxed text-[#726a60]">{item.place}</p>
-                      <p className="location-address mt-1 text-xs leading-relaxed text-[#8b8378]">{item.address}</p>
+                      <h2 id={`location-${item.id}-title`} className="location-heading">{item.title}</h2>
+                      <p id={`location-${item.id}-time`} className="location-time">{item.time}</p>
+                      <p id={`location-${item.id}-place`} className="location-place">{item.place}</p>
+                      <p id={`location-${item.id}-address`} className="location-address">{item.address}</p>
                       <a
+                        id={`location-${item.id}-link`}
                         href={item.mapUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="location-link mt-4 inline-flex items-center gap-2 rounded-full border border-[#cfc3b4] px-4 py-2 text-xs uppercase tracking-[0.16em] text-[#665f55] transition hover:bg-[#f2ece3]"
+                        className="location-link"
                       >
-                        Ver ubicación <ExternalLink className="inline-icon h-3.5 w-3.5" />
+                        Ver ubicación <ExternalLink />
                       </a>
                     </div>
                   </div>
@@ -281,25 +388,25 @@ export default function DigitalWeddingInvitation() {
           </div>
         </section>
 
-        <section className="countdown-section content-scene bg-soft-mint px-5 py-16 sm:py-20">
-          <div className="countdown-inner mx-auto max-w-3xl">
-            <div className="text-center">
-              <p className="section-kicker font-script text-4xl text-[#7b8f87] sm:text-5xl">Faltan</p>
-              <div className="countdown-grid mt-5 grid grid-cols-4 gap-2 sm:gap-4">
-                <StatCard label="Días" value={countdown.days} />
-                <StatCard label="Horas" value={String(countdown.hours).padStart(2, "0")} />
-                <StatCard label="Min" value={String(countdown.minutes).padStart(2, "0")} />
-                <StatCard label="Seg" value={String(countdown.seconds).padStart(2, "0")} />
+        <section id="scene-countdown" className="countdown-section content-scene bg-soft-mint" data-scene="countdown">
+          <div id="countdown-content" className="countdown-inner" data-group="content">
+            <div id="countdown-heading" className="section-heading">
+              <p id="countdown-kicker" className="section-kicker">Faltan</p>
+              <div id="countdown-stats" className="countdown-grid" data-group="countdown">
+                <StatCard id="countdown-days" label="Días" value={countdown.days} />
+                <StatCard id="countdown-hours" label="Horas" value={String(countdown.hours).padStart(2, "0")} />
+                <StatCard id="countdown-minutes" label="Min" value={String(countdown.minutes).padStart(2, "0")} />
+                <StatCard id="countdown-seconds" label="Seg" value={String(countdown.seconds).padStart(2, "0")} />
               </div>
             </div>
 
-            <div className="timeline mx-auto mt-12 max-w-xl">
-              {schedule.map((item) => (
-                <div key={`${item.time}-${item.title}`} className="timeline-row grid grid-cols-[90px_1fr] gap-4 border-l border-[#cfc8bd] pb-7 pl-5 last:pb-0">
-                  <span className="timeline-time font-cinzel text-xs uppercase tracking-[0.14em] text-[#7aa99d]">{item.time}</span>
+            <div id="event-timeline" className="timeline" data-group="timeline">
+              {schedule.map((item, index) => (
+                <div id={`timeline-item-${index + 1}`} key={`${item.time}-${item.title}`} className="timeline-row">
+                  <span className="timeline-time">{item.time}</span>
                   <div>
-                    <h3 className="timeline-title font-serif text-xl font-semibold text-[#5b554e]">{item.title}</h3>
-                    <p className="timeline-detail mt-1 text-sm text-[#7d7469]">{item.detail}</p>
+                    <h3 className="timeline-title">{item.title}</h3>
+                    <p className="timeline-detail">{item.detail}</p>
                   </div>
                 </div>
               ))}
@@ -406,68 +513,70 @@ function RsvpSection({
   };
 
   return (
-    <section id="rsvp" className="rsvp-section content-scene bg-envelope-paper px-5 py-16 sm:py-20">
-      <div className="rsvp-inner mx-auto max-w-2xl">
-        <div className="text-center">
-          <p className="section-kicker font-script text-4xl text-[#7b8f87] sm:text-5xl">Confirmar asistencia</p>
-          <h2 className="section-title section-title-small mt-3 font-cinzel text-xl uppercase tracking-[0.16em] text-[#4d4a45] sm:text-2xl">
+    <section id="rsvp" className="rsvp-section content-scene bg-envelope-paper" data-scene="rsvp">
+      <div id="rsvp-content" className="rsvp-inner" data-group="content">
+        <div id="rsvp-heading" className="section-heading">
+          <p id="rsvp-kicker" className="section-kicker">Confirmar asistencia</p>
+          <h2 id="rsvp-title" className="section-title section-title-small">
             ¿Nos acompañas?
           </h2>
-          <p className="section-copy section-copy-small mx-auto mt-3 max-w-md text-sm leading-relaxed text-[#756e64]">
+          <p id="rsvp-copy" className="section-copy section-copy-small">
             Agradecemos confirmar antes del {weddingConfig.rsvp.deadline}. Esta invitación contempla{" "}
             {invitationType === "2" ? "2 lugares" : "1 lugar"}.
           </p>
         </div>
 
-        <div className="rsvp-panel mt-8 rounded-lg border border-[#d9cec0] bg-white/82 p-5 shadow-lg sm:p-7">
+        <div id="rsvp-panel" className="rsvp-panel" data-group="form">
           {status === "done" ? (
-            <div className="success-state py-8 text-center">
-              <CheckCircle2 className="success-icon mx-auto h-12 w-12 text-[#79a69a]" />
-              <h3 className="success-title mt-4 font-serif text-3xl text-[#4d4a45]">Respuesta registrada</h3>
-              <p className="success-copy mx-auto mt-2 max-w-sm text-sm text-[#756e64]">
+            <div id="rsvp-success" className="success-state">
+              <CheckCircle2 className="success-icon" />
+              <h3 className="success-title">Respuesta registrada</h3>
+              <p className="success-copy">
                 Muchas gracias. Tu confirmación fue guardada para Natalia y Gabriel.
               </p>
               <button
+                id="rsvp-reset"
                 type="button"
                 onClick={reset}
-                className="secondary-button mt-6 rounded-full border border-[#cfc3b4] px-5 py-2 text-xs uppercase tracking-[0.16em] text-[#665f55] transition hover:bg-[#f2ece3]"
+                className="secondary-button"
               >
                 Registrar otra respuesta
               </button>
             </div>
           ) : (
-            <form onSubmit={submit} className="rsvp-form space-y-5">
-              <label className="block">
+            <form id="rsvp-form" onSubmit={submit} className="rsvp-form">
+              <label className="form-field" htmlFor="rsvp-name">
                 <span className="form-label">Nombre y apellido</span>
-                <input className="form-input" value={name} onChange={(event) => setName(event.target.value)} required />
+                <input id="rsvp-name" className="form-input" value={name} onChange={(event) => setName(event.target.value)} required />
               </label>
 
-              <div>
-                <span className="form-label">¿Confirmas tu asistencia?</span>
-                <div className="choice-grid grid grid-cols-2 gap-3">
-                  {(["Asistirá", "No Asistirá"] as Attendance[]).map((option) => (
-                    <label key={option} className="choice-option cursor-pointer">
+              <fieldset id="rsvp-attendance" className="form-group">
+                <legend className="form-label">¿Confirmas tu asistencia?</legend>
+                <div className="choice-grid">
+                  {(["Asistirá", "No Asistirá"] as Attendance[]).map((option, index) => (
+                    <label key={option} className="choice-option" htmlFor={`rsvp-attendance-${index}`}>
                       <input
+                        id={`rsvp-attendance-${index}`}
                         type="radio"
                         name="attendance"
                         value={option}
                         checked={attendance === option}
                         onChange={() => setAttendance(option)}
-                        className="peer sr-only"
                       />
-                      <span className="choice-card flex h-full items-center justify-center gap-2 rounded-lg border border-[#d9cec0] bg-[#fcfaf7] px-3 py-3 text-center text-sm text-[#5f594f] transition peer-checked:border-[#7aa99d] peer-checked:bg-[#e7f3ef]">
-                        {option === "Asistirá" ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
+                      <span className="choice-card">
+                        {option === "Asistirá" ? <CheckCircle2 /> : <XCircle />}
                         {option === "Asistirá" ? "Sí, asistiré" : "No podré asistir"}
                       </span>
                     </label>
                   ))}
                 </div>
-              </div>
+              </fieldset>
 
-              <div className="form-grid grid gap-4 sm:grid-cols-2">
-                <label className="block">
+              <div id="rsvp-contact-group" className="form-grid" data-group="contact">
+                <label className="form-field" htmlFor="rsvp-people">
                   <span className="form-label">Personas que asistirán</span>
                   <select
+                    id="rsvp-people"
                     className="form-input"
                     value={attendance === "Asistirá" ? 1 + companions : 0}
                     disabled={attendance === "No Asistirá"}
@@ -485,9 +594,10 @@ function RsvpSection({
                   </select>
                 </label>
 
-                <label className="block">
+                <label className="form-field" htmlFor="rsvp-phone">
                   <span className="form-label">Teléfono</span>
                   <input
+                    id="rsvp-phone"
                     className="form-input"
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
@@ -497,40 +607,41 @@ function RsvpSection({
                 </label>
               </div>
 
-              <div>
-                <span className="form-label">Restricciones alimentarias</span>
-                <div className="diet-grid grid grid-cols-2 gap-2">
-                  {dietaryOptions.map((option) => (
-                    <label key={option} className="diet-option flex items-center gap-2 rounded-lg bg-[#fcfaf7] px-3 py-2 text-xs text-[#655e54]">
+              <fieldset id="rsvp-dietary" className="form-group">
+                <legend className="form-label">Restricciones alimentarias</legend>
+                <div className="diet-grid">
+                  {dietaryOptions.map((option, index) => (
+                    <label key={option} className="diet-option" htmlFor={`rsvp-diet-${index}`}>
                       <input
+                        id={`rsvp-diet-${index}`}
                         type="checkbox"
                         checked={dietary.includes(option)}
                         onChange={() => toggleDiet(option)}
-                        className="h-4 w-4 accent-[#7aa99d]"
                       />
                       {option}
                     </label>
                   ))}
                 </div>
-              </div>
+              </fieldset>
 
-              <label className="block">
+              <label className="form-field" htmlFor="rsvp-details">
                 <span className="form-label">Mensaje o comentario</span>
-                <textarea className="form-input min-h-24 resize-y" value={details} onChange={(event) => setDetails(event.target.value)} />
+                <textarea id="rsvp-details" className="form-input form-textarea" value={details} onChange={(event) => setDetails(event.target.value)} />
               </label>
 
               {status === "error" && (
-                <p className="form-alert rounded-lg border border-[#e5b9ad] bg-[#fff2ef] px-4 py-3 text-sm text-[#8a4b3d]">
+                <p id="rsvp-error" className="form-alert">
                   No pude confirmar la conexión con Google Sheets. Dejé una copia local en este navegador para respaldo.
                 </p>
               )}
 
               <button
+                id="rsvp-submit"
                 type="submit"
                 disabled={status === "sending"}
-                className="primary-button inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#7aa99d] px-6 py-3 font-cinzel text-xs uppercase tracking-[0.18em] text-white shadow-md transition hover:bg-[#678f86] disabled:opacity-60"
+                className="primary-button"
               >
-                {status === "sending" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                {status === "sending" ? <Loader2 className="status-spinner" /> : <Send />}
                 Enviar respuesta
               </button>
             </form>
@@ -551,56 +662,57 @@ function AdminSummary({
   remoteLoaded: boolean;
 }) {
   return (
-    <section className="admin-section content-scene bg-soft-mint px-5 py-16">
-      <div className="admin-inner mx-auto max-w-5xl">
-        <div className="admin-heading mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <section id="scene-admin" className="admin-section content-scene bg-soft-mint" data-scene="admin">
+      <div id="admin-content" className="admin-inner" data-group="content">
+        <div id="admin-heading" className="admin-heading">
           <div>
-            <div className="admin-badge inline-flex items-center gap-2 rounded-full border border-[#cbd9d3] bg-white/70 px-3 py-1 text-xs text-[#607d75]">
-              <Lock className="h-3.5 w-3.5" />
+            <div id="admin-badge" className="admin-badge">
+              <Lock />
               Resumen privado
             </div>
-            <h2 className="admin-title mt-3 font-serif text-3xl text-[#4d4a45]">Confirmaciones recibidas</h2>
+            <h2 id="admin-title" className="admin-title">Confirmaciones recibidas</h2>
           </div>
-          <p className="admin-copy text-sm text-[#756e64]">
+          <p id="admin-copy" className="admin-copy">
             {remoteLoaded ? "Datos leídos desde el endpoint configurado o respaldo local." : "Mostrando respaldo local."}
           </p>
         </div>
 
-        <div className="admin-stats grid gap-3 sm:grid-cols-4">
-          <StatCard label="Asisten" value={stats.yes} />
-          <StatCard label="No asisten" value={stats.no} />
-          <StatCard label="Personas" value={stats.people} />
-          <StatCard label="Restricciones" value={stats.diets} />
+        <div id="admin-stats" className="admin-stats" data-group="stats">
+          <StatCard id="admin-stat-yes" label="Asisten" value={stats.yes} />
+          <StatCard id="admin-stat-no" label="No asisten" value={stats.no} />
+          <StatCard id="admin-stat-people" label="Personas" value={stats.people} />
+          <StatCard id="admin-stat-diets" label="Restricciones" value={stats.diets} />
         </div>
 
-        <div className="admin-table mt-6 overflow-hidden rounded-lg border border-[#d8d0c5] bg-white/82 shadow-sm">
-          <div className="admin-table-row admin-table-head grid grid-cols-[1.2fr_0.8fr_0.7fr_1fr] gap-3 bg-[#f7f4ee] px-4 py-3 font-cinzel text-[10px] uppercase tracking-[0.14em] text-[#6e675e]">
+        <div id="admin-table" className="admin-table" data-group="responses">
+          <div id="admin-table-head" className="admin-table-row admin-table-head">
             <span>Invitado</span>
             <span>Asistencia</span>
             <span>Personas</span>
             <span>Contacto</span>
           </div>
           {guests.length === 0 ? (
-            <div className="empty-state px-4 py-10 text-center text-sm text-[#7d7469]">Aún no hay respuestas registradas.</div>
+            <div id="admin-empty" className="empty-state">Aún no hay respuestas registradas.</div>
           ) : (
-            guests.slice(0, 20).map((guest) => (
+            guests.slice(0, 20).map((guest, index) => (
               <div
+                id={`admin-response-${index + 1}`}
                 key={guest.id}
-                className="admin-table-row grid grid-cols-[1.2fr_0.8fr_0.7fr_1fr] gap-3 border-t border-[#ece5dc] px-4 py-3 text-sm text-[#5f594f]"
+                className="admin-table-row"
               >
-                <span className="font-semibold">{guest.name}</span>
+                <strong>{guest.name}</strong>
                 <span>{guest.attendance}</span>
                 <span>{guest.attendance === "Asistirá" ? 1 + Number(guest.companions || 0) : 0}</span>
-                <span className="truncate">{guest.phone || "-"}</span>
+                <span className="admin-contact">{guest.phone || "-"}</span>
               </div>
             ))
           )}
         </div>
 
-        <div className="admin-notes mt-5 grid gap-3 text-sm text-[#756e64] sm:grid-cols-3">
-          <span className="inline-flex items-center gap-2"><Users className="h-4 w-4" /> Invitación 1 o 2 según `?inv=`</span>
-          <span className="inline-flex items-center gap-2"><Utensils className="h-4 w-4" /> Restricciones en detalle dentro de la hoja</span>
-          <span className="inline-flex items-center gap-2"><Phone className="h-4 w-4" /> Teléfono incluido en cada respuesta</span>
+        <div id="admin-notes" className="admin-notes" data-group="notes">
+          <span><Users /> Invitación 1 o 2 según `?inv=`</span>
+          <span><Utensils /> Restricciones en detalle dentro de la hoja</span>
+          <span><Phone /> Teléfono incluido en cada respuesta</span>
         </div>
       </div>
     </section>

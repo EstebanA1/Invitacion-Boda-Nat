@@ -32,55 +32,16 @@
   --font-sans: "Montserrat", sans-serif;
 }
 
-/* Scalloped lace border effects */
-.lace-scallop-border {
-  background-image: 
-    radial-gradient(circle at 10px 0, transparent 8px, #ffffff 8.5px),
-    radial-gradient(circle at 10px 100%, transparent 8px, #ffffff 8.5px),
-    radial-gradient(circle at 0 10px, transparent 8px, #ffffff 8.5px),
-    radial-gradient(circle at 100% 10px, transparent 8px, #ffffff 8.5px);
-  background-size: 20px 100%, 20px 100%, 100% 20px, 100% 20px;
-  background-position: 0 0, 0 100%, 0 0, 100% 0;
-  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-}
-
-/* Pearl border dots for oval frame */
-.pearl-bead-ring {
-  background-image: radial-gradient(circle, #ffffff 2px, #cdd7df 3.5px, transparent 4px);
-  background-size: 14px 14px;
-}
-
-/* Wax seal 3D realistic shadow and texture */
-.wax-seal-shadow {
-  box-shadow: 
-    inset 0 2px 4px rgba(255, 255, 255, 0.7),
-    inset 0 -2px 4px rgba(120, 100, 80, 0.3),
-    0 4px 10px rgba(70, 80, 95, 0.25),
-    0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.card-paper-shadow {
-  box-shadow: 
-    0 2px 6px rgba(44, 60, 74, 0.06),
-    0 12px 28px rgba(44, 60, 74, 0.12),
-    0 1px 1px rgba(255, 255, 255, 0.8) inset;
-}
-
-.envelope-shadow {
-  box-shadow: 
-    0 10px 30px -5px rgba(50, 70, 90, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
-}
-
 html {
   scroll-behavior: smooth;
-  background: #f3f2f1;
+  background: #f3f2f2;
   color-scheme: light;
 }
 
 body {
   margin: 0;
-  background: #f3f2f1;
+  overflow-x: hidden;
+  background: #f3f2f2;
   color-scheme: light;
 }
 
@@ -96,6 +57,7 @@ textarea {
 }
 
 .invitation-scene {
+  position: relative;
   min-height: 100svh;
   width: 100%;
   display: flex;
@@ -107,12 +69,439 @@ textarea {
   scroll-snap-stop: always;
 }
 
-.scene-image {
-  max-height: 100svh;
+/* Cada escena visual usa un lienzo maestro de 540 px y coordenadas porcentuales. */
+.layered-scene {
+  position: relative;
+  width: 540px;
+  max-width: 100vw;
+  height: 100svh;
+  flex: 0 0 auto;
+  isolation: isolate;
+  container-type: inline-size;
+}
+
+.layered-scene > img,
+.layered-scene > div {
+  position: absolute;
+}
+
+.cover-composition {
+  overflow: hidden;
+}
+
+.scene-guide {
+  z-index: 100 !important;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  opacity: 0.48;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Escena 1: portada */
+.cover-composition img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.cover-floral {
+  z-index: 1;
+  width: 50%;
+  height: 21%;
+  max-width: none;
+  object-fit: fill;
+}
+
+.cover-floral-top {
+  top: 0;
+  left: -2%;
+}
+
+.cover-floral-bottom {
+  right: -3%;
+  bottom: 0;
+  width: 54%;
+  transform: rotate(180deg);
+}
+
+.cover-intro,
+.cover-names,
+.cover-reserved {
+  z-index: 4;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+}
+
+.cover-intro {
+  top: 17.5%;
+  display: grid;
+  gap: 0.15rem;
+  padding: 0 1rem;
+  color: #4d4a45;
+  font-family: "Cinzel", serif;
+  font-size: 2.35cqw;
+  letter-spacing: 0.12em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.cover-names {
+  top: 23.5%;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35rem;
+  color: #4d4a45;
+  font-family: "Pinyon Script", cursive;
+  font-size: 8.2cqw;
+  line-height: 0.9;
+  white-space: nowrap;
+}
+
+.cover-names small {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 4.2cqw;
+  font-style: italic;
+}
+
+.cover-envelope {
+  z-index: 2;
+  top: 36%;
+  left: 17.5%;
+  width: 69%;
+  height: 25.5%;
+  object-fit: fill;
+}
+
+.cover-bouquet {
+  z-index: 3;
+  top: 34.5%;
+  right: -1%;
+  width: 31%;
+  height: 40%;
+  max-width: none;
+  object-fit: fill;
+  transform: rotate(-3deg);
+}
+
+.cover-seal {
+  z-index: 5;
+  top: 43.5%;
+  left: 41%;
+  width: 20%;
+  height: 10%;
+  object-fit: fill;
+}
+
+.cover-reserved {
+  top: 68.5%;
+  display: grid;
+  gap: 0.3rem;
+  color: #4d4a45;
+  font-family: "Cinzel", serif;
+  font-size: 2.35cqw;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.cover-reserved strong {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 9.5cqw;
+  font-style: normal;
+  line-height: 0.95;
+}
+
+/* Escena 2: sobre abierto */
+.open-envelope-back {
+  z-index: 1;
+  top: 18.5%;
+  left: 5%;
+  width: 84%;
+  height: 52%;
+  max-width: none;
+  object-fit: fill;
+}
+
+.open-envelope-photo-frame {
+  z-index: 2;
+  top: 31.7%;
+  left: 20%;
+  width: 52%;
+  height: 22.6%;
+  overflow: hidden;
+  border: 0.35rem solid #fdfcf9;
+  background: #fdfcf9;
+  box-shadow: 0 0.35rem 1rem rgba(77, 74, 69, 0.16);
+}
+
+.open-envelope-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 44%;
+}
+
+.open-envelope-front {
+  z-index: 3;
+  top: 33.5%;
+  left: -5%;
+  width: 110%;
+  height: 46%;
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.open-envelope-pearls {
+  z-index: 4;
+  top: 28.8%;
+  left: 19.5%;
+  width: 17%;
+  height: 15%;
+  object-fit: fill;
+  transform: rotate(-5deg);
+}
+
+/* Escena 3: tarjeta de fecha */
+.date-card-composition {
+  overflow: visible;
+}
+
+.date-card-frame {
+  z-index: 1;
+  top: 5.5%;
+  left: 3%;
+  width: 94%;
+  height: 74%;
+  object-fit: fill;
+}
+
+.date-card-copy {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  color: #4d4a45;
+  text-align: center;
+}
+
+/* Contenido interno del marco: relleno vertical proporcional. */
+.date-card-body {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  box-sizing: border-box;
+  width: 80%;
+  height: 60%;
+  padding-block: 2% 3%;
+}
+
+.date-card-names {
+  position: relative;
+  display: grid;
+  margin-top: 10%;
+  width: 100%;
+  gap: 0.4cqw;
+  font-family: "Pinyon Script", cursive;
+  font-size: 8.6cqw;
+  line-height: 0.9;
+}
+
+.date-card-names small {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3.8cqw;
+  font-style: italic;
+}
+
+.date-card-main-divider {
+  position: relative !important;
+  width: 72%;
+  height: 2.2cqw;
+  flex-shrink: 0;
+  object-fit: fill;
+}
+
+.date-card-date {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 0;
+  width: 90%;
+  color: #4d4a45;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 4.7cqw;
+}
+
+.date-card-side {
+  display: grid;
+  justify-items: center;
+  gap: 0.55cqw;
+}
+
+.gold-divider-sm {
+  position: relative !important;
+  width: 92%;
+  height: 1.2cqw;
+  max-width: 8rem;
+  object-fit: fill;
+}
+
+.date-card-date strong {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: #d1a42f;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 15.2cqw;
+  font-weight: 500;
+  line-height: 0.85;
+}
+
+.date-card-year {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  color: #4d4a45;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 7.2cqw;
+}
+
+.date-card-year strong {
+  color: inherit;
+  font-weight: 600;
+}
+
+.date-card-quote {
+  position: absolute;
+  top: 78%;
+  left: 15%;
+  width: 70%;
+  margin: 0;
+  padding-inline: 5.5cqw;
+  color: #4d4a45;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 4.2cqw;
+  font-style: italic;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.date-card-flower {
+  z-index: 3;
+  top: 54%;
+  left: 0;
+  width: 20%;
+  height: 24%;
+  object-fit: fill;
+  transform: rotate(5deg);
+}
+
+/* Escena 4: bendición y fotografía */
+#scene-blessing {
+  --blessing-divider-shift: clamp(2rem, 4svh, 3.5rem);
+  min-height: calc(100svh + var(--blessing-divider-shift));
+  align-items: flex-start;
+  background: #e2f5f1;
+}
+
+.blessing-composition {
+  background: #e2f5f1;
+}
+
+.oval-frame {
+  z-index: 2;
+  top: 4%;
+  left: 6%;
+  width: 88%;
+  height: 70%;
+  object-fit: fill;
+}
+
+.oval-photo-frame {
+  z-index: 1;
+  top: 10.7%;
+  left: 16.8%;
+  width: 66.4%;
+  height: 55.2%;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #e2f5f1;
+  clip-path: ellipse(49.5% 50% at 50% 50%);
+}
+
+.oval-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 46%;
+}
+
+.blessing-copy {
+  z-index: 3;
+  top: 73%;
+  left: 7%;
+  display: grid;
+  width: 86%;
+  gap: 1.5rem;
+  color: #161a19;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 5.9cqw;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.blessing-copy strong {
+  font-size: 7cqw;
+  font-weight: 500;
+}
+
+.blessing-heart-divider {
+  z-index: 3;
+  top: calc(87.5% + var(--blessing-divider-shift));
+  left: 6%;
+  width: 88%;
+  height: 11.5%;
+  object-fit: contain;
+}
+
+.layer-reveal,
+.layer-reveal-delay,
+.layer-reveal-late {
+  animation: layer-rise 900ms ease both;
+}
+
+.layer-reveal-delay {
+  animation-delay: 140ms;
+}
+
+.layer-reveal-late {
+  animation-delay: 280ms;
+}
+
+@supports (animation-timeline: view()) {
+  .layer-reveal,
+  .layer-reveal-delay,
+  .layer-reveal-late {
+    animation-timeline: view();
+    animation-range: entry 8% cover 35%;
+  }
 }
 
 .wedding-invitation {
   min-height: 100vh;
+  background: #f3f2f1;
   color: #4d4a45;
   font-family: "Montserrat", sans-serif;
 }
@@ -139,6 +528,11 @@ textarea {
   color: #607d75;
   box-shadow: 0 12px 28px rgba(77, 74, 69, 0.16);
   backdrop-filter: blur(8px);
+  transition: transform 180ms ease;
+}
+
+.quick-rsvp:hover {
+  transform: scale(1.05);
 }
 
 #musicToggleBtn {
@@ -160,36 +554,66 @@ textarea {
 }
 
 .opening-card {
-  display: block;
-  width: min(100%, 540px);
-  max-width: 540px;
+  display: flex;
+  width: 100%;
+  height: 100svh;
+  max-width: none;
+  align-items: center;
+  justify-content: center;
   padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
   text-align: left;
+  transform-origin: 50% 60%;
+  animation: rise-slow 900ms ease both;
+  transition: transform 300ms ease;
+}
+
+.opening-card:hover {
+  transform: scale(1.01);
+}
+
+.opening-card:focus-visible {
+  outline: 4px solid rgba(155, 207, 195, 0.5);
+  outline-offset: -4px;
 }
 
 .open-hint {
   position: absolute;
   left: 50%;
-  bottom: 1.25rem;
+  bottom: clamp(0.85rem, 2.5svh, 1.25rem);
   z-index: 3;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.25rem;
-  border: 0;
-  background: transparent;
-  color: #77736c;
+  min-width: clamp(7.5rem, 34vw, 9rem);
+  padding: 0.7rem 1.15rem 0.55rem;
+  border: 1px solid #c5d8d0;
+  border-radius: 999px;
+  background: rgba(255, 252, 249, 0.94);
+  color: #4d4a45;
   font-family: "Cinzel", serif;
-  font-size: 0.62rem;
-  letter-spacing: 0.25em;
+  font-size: clamp(0.56rem, 2.25vw, 0.62rem);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  transform: translateX(-50%);
+  translate: -50% 0;
   cursor: pointer;
 }
 
+.open-hint:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(155, 207, 195, 0.45);
+}
+
+.open-hint-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Secciones de información, cuenta regresiva, RSVP y administración */
 .info-section,
 .countdown-section,
 .rsvp-section,
@@ -212,6 +636,10 @@ textarea {
 
 .info-inner,
 .rsvp-inner {
+  text-align: center;
+}
+
+.section-heading {
   text-align: center;
 }
 
@@ -327,6 +755,7 @@ textarea {
   text-transform: uppercase;
   letter-spacing: 0.16em;
   cursor: pointer;
+  transition: background-color 180ms ease, border-color 180ms ease, opacity 180ms ease;
 }
 
 .location-link,
@@ -337,6 +766,11 @@ textarea {
   color: #665f55;
   padding: 0.62rem 1rem;
   font-size: 0.72rem;
+}
+
+.location-link:hover,
+.secondary-button:hover {
+  background: #f2ece3;
 }
 
 .countdown-grid,
@@ -420,6 +854,17 @@ textarea {
   gap: 1.25rem;
 }
 
+.form-field {
+  display: block;
+}
+
+.form-group {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
 .choice-grid,
 .form-grid,
 .diet-grid {
@@ -440,6 +885,10 @@ textarea {
   position: absolute;
   opacity: 0;
   pointer-events: none;
+}
+
+.choice-option {
+  cursor: pointer;
 }
 
 .choice-card,
@@ -470,6 +919,13 @@ textarea {
   text-align: left;
 }
 
+.diet-option input {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  accent-color: #7aa99d;
+}
+
 .primary-button {
   width: 100%;
   border: 0;
@@ -479,6 +935,19 @@ textarea {
   font-family: "Cinzel", serif;
   font-size: 0.75rem;
   box-shadow: 0 12px 22px rgba(91, 128, 118, 0.22);
+}
+
+.primary-button:hover {
+  background: #678f86;
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.status-spinner {
+  animation: spin 900ms linear infinite;
 }
 
 .form-alert {
@@ -572,6 +1041,16 @@ textarea {
   text-transform: uppercase;
 }
 
+.admin-table-row strong {
+  font-weight: 600;
+}
+
+.admin-contact {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .admin-notes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -587,6 +1066,8 @@ textarea {
 
 .empty-state {
   padding: 2.5rem 1rem;
+  color: #7d7469;
+  font-size: 0.88rem;
   text-align: center;
 }
 
@@ -598,33 +1079,25 @@ textarea {
 }
 
 .bg-cover-paper {
-  background:
-    radial-gradient(circle at 50% 42%, rgba(245, 246, 244, 0.62), rgba(234, 236, 232, 0.96) 72%),
-    #eaece8;
+  background: #f4f3f5;
 }
 
 .bg-envelope-paper {
-  background:
-    radial-gradient(circle at 50% 42%, rgba(250, 249, 248, 0.72), rgba(243, 242, 241, 0.98) 74%),
-    #f3f2f1;
+  background: #f3f2f2;
 }
 
 .bg-date-paper {
-  background:
-    radial-gradient(circle at 50% 42%, rgba(247, 246, 245, 0.68), rgba(236, 234, 232, 0.98) 74%),
-    #eceae8;
+  background: #f3f2f2;
 }
 
 .bg-paper-glow {
-  background:
-    radial-gradient(circle at 50% 40%, rgba(247, 248, 246, 0.52), rgba(234, 236, 232, 0.86) 78%),
-    #eaece8;
+  position: absolute;
+  inset: 0;
+  background: #f4f3f5;
 }
 
 .bg-mint-photo {
-  background:
-    radial-gradient(circle at 50% 38%, rgba(206, 236, 227, 0.72), rgba(204, 234, 225, 0.98) 74%),
-    #cceae1;
+  background: #e2f5f1;
 }
 
 .bg-soft-mint {
@@ -633,9 +1106,9 @@ textarea {
     #e2f2ec;
 }
 
-.opening-card {
-  animation: rise-slow 900ms ease both;
-  transform-origin: 50% 60%;
+.cover-seal.is-popping {
+  animation: seal-pop 430ms cubic-bezier(0.16, 0.82, 0.24, 1.2) both;
+  transform-origin: center;
 }
 
 .opening-card::before {
@@ -687,6 +1160,11 @@ textarea {
   box-shadow: 0 0 0 3px rgba(122, 169, 157, 0.18);
 }
 
+.form-textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
 @keyframes rise-slow {
   from {
     opacity: 0;
@@ -698,25 +1176,16 @@ textarea {
   }
 }
 
-@keyframes float-in {
+@keyframes layer-rise {
   from {
     opacity: 0;
-    transform: translateY(44px);
+    translate: 0 24px;
+    scale: 0.98;
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes soft-zoom {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
+    translate: 0 0;
+    scale: 1;
   }
 }
 
@@ -753,26 +1222,9 @@ textarea {
   }
 }
 
-.animate-rise-slow {
-  animation: rise-slow 900ms ease both;
-}
-
-.animate-float-in {
-  animation: float-in 900ms ease both;
-  animation-timeline: view();
-  animation-range: entry 8% cover 32%;
-}
-
-.animate-soft-zoom {
-  animation: soft-zoom 900ms ease both;
-  animation-timeline: view();
-  animation-range: entry 8% cover 34%;
-}
-
-@supports not (animation-timeline: view()) {
-  .animate-float-in,
-  .animate-soft-zoom {
-    animation-timeline: auto;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -781,11 +1233,8 @@ textarea {
     scroll-snap-type: y mandatory;
   }
 
-  .invitation-scene .scene-image {
-    width: auto;
-    max-width: none;
-    height: 100svh;
-    object-fit: cover;
+  .gold-divider-sm {
+    max-width: 24cqw;
   }
 
   .info-section,
@@ -833,6 +1282,21 @@ textarea {
 
   .admin-table-row {
     min-width: 42rem;
+  }
+}
+
+@keyframes seal-pop {
+  0% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.34);
+  }
+  72% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1.28);
   }
 }
 

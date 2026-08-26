@@ -104,21 +104,64 @@ El formulario guarda primero una copia local. Esto permite conservar la respuest
 
 ## Imágenes y música
 
-Las escenas principales están en:
+Las imágenes de la invitación están en:
 
 ```text
 assets/invitation/
 ```
 
-Archivos actuales:
+Las composiciones nuevas utilizan capas independientes dentro de:
 
-- `cover-1.png`: portada para 1 lugar.
-- `cover-2.png`: portada para 2 lugares.
-- `envelope-photo.png`: sobre abierto con la fotografía de la pareja.
-- `date-card.png`: tarjeta con nombres y fecha.
-- `blessing.png`: fotografía con el mensaje de bendición.
+```text
+assets/invitation/layers/
+```
 
-Si se reemplaza una imagen, se debe conservar el nombre del archivo o actualizar la importación correspondiente en `src/components/DigitalWeddingInvitation.tsx`.
+Capas actuales:
+
+- `white-flowers.png`: arreglo de flores blancas.
+- `green-envelope.png`: sobre cerrado.
+- `envelope-back.png`: parte trasera del sobre abierto.
+- `envelope-front.png`: parte frontal con flores y sello.
+- `envelope-seal.png`: sello con las iniciales NG.
+- `pearl-strands.png`: perlas decorativas.
+- `ornate-frame.png`: marco para la tarjeta de fecha.
+- `gold-divider.png`: separadores de la tarjeta de fecha.
+- `mint-heart-divider.png`: adorno inferior de la escena de bendición.
+- `green-oval-frame.png`: marco ovalado.
+- `mixed-flowers.png`: arreglo de flores variadas.
+- `formal-photo.jpg` y `looking-photo.jpg`: fotografías de Natalia y Gabriel.
+
+Si se reemplaza una imagen, se debe conservar el nombre del archivo o actualizar la importación correspondiente en `src/components/DigitalWeddingInvitation.tsx`. Las posiciones, tamaños y animaciones de cada capa se controlan desde `src/index.css`.
+
+### Ajustes manuales de las escenas
+
+Las escenas visuales utilizan un lienzo vertical que ocupa toda la sección visible. En móvil toma el ancho completo y en escritorio se mantiene centrado con un ancho máximo de `540px`. Las posiciones principales están expresadas en porcentajes para que el diseño se escale como una sola pieza.
+
+- Portada: clases que comienzan con `.cover-`.
+- Sobre abierto: clases que comienzan con `.open-envelope-`.
+- Tarjeta de fecha: clases que comienzan con `.date-card-`.
+- Fotografía ovalada: clases que comienzan con `.oval-` y `.blessing-`.
+
+Cada escena y cada pieza importante también tiene un `id` único para seleccionarla directamente desde DevTools:
+
+- Escenas: `#scene-cover`, `#scene-envelope`, `#scene-date`, `#scene-blessing`, `#scene-details`, `#scene-countdown`, `#rsvp` y `#scene-admin`.
+- Portada: `#cover-intro`, `#cover-names`, `#cover-envelope`, `#cover-seal`, `#cover-bouquet` y `#cover-reserved`.
+- Sobre abierto: `#envelope-back`, `#envelope-photo`, `#envelope-front` y `#envelope-pearls`.
+- Tarjeta: `#date-frame`, `#date-names`, `#date-divider-main`, `#date-row`, `#date-year`, `#date-quote` y `#date-flower`.
+- Bendición: `#blessing-frame`, `#blessing-photo`, `#blessing-copy` y `#blessing-heart-divider`.
+
+Los atributos `data-scene` y `data-group` permiten filtrar grupos completos como `text`, `photo`, `envelope`, `decoration` o `interaction` sin depender del orden del DOM.
+
+Para mover una capa se deben modificar principalmente `top`, `left`, `right` o `width`. Conviene mantener estos valores en porcentajes y evitar márgenes fijos en píxeles dentro de las escenas, porque esos valores no se escalan con el lienzo.
+
+Para comparar las capas con las composiciones de referencia, se puede activar temporalmente una guía semitransparente mediante la URL:
+
+```text
+http://127.0.0.1:3000/?inv=1&guide=1
+http://127.0.0.1:3000/?inv=2&guide=1
+```
+
+Las imágenes de calibración están en `assets/invitation/guides/`. El parámetro `guide=1` es solo una ayuda visual y nunca se utiliza en los enlaces enviados a los invitados.
 
 La música se administra desde `src/components/AudioPlayer.tsx`. La versión actual genera acordes suaves directamente en el navegador, por lo que no depende de un archivo de audio externo.
 
