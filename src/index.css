@@ -75,11 +75,13 @@
 html {
   scroll-behavior: smooth;
   background: #f3f2f1;
+  color-scheme: light;
 }
 
 body {
   margin: 0;
   background: #f3f2f1;
+  color-scheme: light;
 }
 
 button,
