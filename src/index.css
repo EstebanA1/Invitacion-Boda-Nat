@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-dusty-50: #f4f7f9;
+  --color-dusty-100: #e5edf2;
+  --color-dusty-200: #ccdce6;
+  --color-dusty-300: #adc5d6;
+  --color-dusty-400: #8eaec4;
+  --color-dusty-500: #7b9eb6;
+  --color-dusty-600: #65859e;
+  --color-dusty-700: #516d84;
+  --color-dusty-800: #3f5567;
+  --color-dusty-900: #2c3c4a;
+
+  --color-ivory-50: #fefdfa;
+  --color-ivory-100: #fbf9f3;
+  --color-ivory-200: #f5f0e4;
+  --color-ivory-300: #ede4d1;
+  --color-ivory-400: #ded0b7;
+
+  --color-champagne-100: #f7f1e6;
+  --color-champagne-200: #ebdcc5;
+  --color-champagne-300: #d6be9a;
+  --color-champagne-500: #b09164;
+  --color-champagne-700: #846842;
+
+  --font-pinyon: "Pinyon Script", cursive;
+  --font-script: "Great Vibes", "Alex Brush", cursive;
+  --font-serif: "Cormorant Garamond", "Playfair Display", serif;
+  --font-cinzel: "Cinzel", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+/* Scalloped lace border effects */
+.lace-scallop-border {
+  background-image: 
+    radial-gradient(circle at 10px 0, transparent 8px, #ffffff 8.5px),
+    radial-gradient(circle at 10px 100%, transparent 8px, #ffffff 8.5px),
+    radial-gradient(circle at 0 10px, transparent 8px, #ffffff 8.5px),
+    radial-gradient(circle at 100% 10px, transparent 8px, #ffffff 8.5px);
+  background-size: 20px 100%, 20px 100%, 100% 20px, 100% 20px;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+}
+
+/* Pearl border dots for oval frame */
+.pearl-bead-ring {
+  background-image: radial-gradient(circle, #ffffff 2px, #cdd7df 3.5px, transparent 4px);
+  background-size: 14px 14px;
+}
+
+/* Wax seal 3D realistic shadow and texture */
+.wax-seal-shadow {
+  box-shadow: 
+    inset 0 2px 4px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 4px rgba(120, 100, 80, 0.3),
+    0 4px 10px rgba(70, 80, 95, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.card-paper-shadow {
+  box-shadow: 
+    0 2px 6px rgba(44, 60, 74, 0.06),
+    0 12px 28px rgba(44, 60, 74, 0.12),
+    0 1px 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+.envelope-shadow {
+  box-shadow: 
+    0 10px 30px -5px rgba(50, 70, 90, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #f3f2f1;
+}
+
+body {
+  margin: 0;
+  background: #f3f2f1;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.invitation-scroll {
+  scroll-snap-type: y proximity;
+}
+
+.invitation-scene {
+  min-height: 100svh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.scene-image {
+  max-height: 100svh;
+}
+
+.content-scene {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  scroll-snap-align: start;
+}
+
+.bg-cover-paper {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(245, 246, 244, 0.62), rgba(234, 236, 232, 0.96) 72%),
+    #eaece8;
+}
+
+.bg-envelope-paper {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(250, 249, 248, 0.72), rgba(243, 242, 241, 0.98) 74%),
+    #f3f2f1;
+}
+
+.bg-date-paper {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(247, 246, 245, 0.68), rgba(236, 234, 232, 0.98) 74%),
+    #eceae8;
+}
+
+.bg-paper-glow {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(247, 248, 246, 0.52), rgba(234, 236, 232, 0.86) 78%),
+    #eaece8;
+}
+
+.bg-mint-photo {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(206, 236, 227, 0.72), rgba(204, 234, 225, 0.98) 74%),
+    #cceae1;
+}
+
+.bg-soft-mint {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(244, 250, 247, 0.7), rgba(226, 242, 236, 0.98) 70%),
+    #e2f2ec;
+}
+
+.opening-card {
+  animation: rise-slow 900ms ease both;
+  transform-origin: 50% 60%;
+}
+
+.opening-card::before {
+  content: "";
+  position: absolute;
+  left: 28%;
+  right: 28%;
+  top: 37%;
+  height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(135, 221, 203, 0.34), rgba(135, 221, 203, 0));
+  opacity: 0;
+  transform: scale(0.35);
+  z-index: -1;
+}
+
+.opening-card.is-opening {
+  animation: open-invitation 760ms cubic-bezier(0.2, 0.72, 0.18, 1) both;
+}
+
+.opening-card.is-opening::before {
+  animation: seal-glow 760ms ease both;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: "Cinzel", serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6f685f;
+}
+
+.form-input {
+  width: 100%;
+  border: 1px solid #d9cec0;
+  border-radius: 0.5rem;
+  background: #fcfaf7;
+  color: #4d4a45;
+  padding: 0.78rem 0.9rem;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.form-input:focus {
+  border-color: #7aa99d;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(122, 169, 157, 0.18);
+}
+
+@keyframes rise-slow {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes float-in {
+  from {
+    opacity: 0;
+    transform: translateY(44px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes soft-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes open-invitation {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 18px 34px rgba(74, 59, 47, 0.14));
+  }
+  42% {
+    opacity: 1;
+    transform: translateY(-18px) scale(1.035) rotateX(4deg);
+    filter: drop-shadow(0 28px 44px rgba(74, 59, 47, 0.18));
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-92px) scale(1.08);
+    filter: drop-shadow(0 34px 58px rgba(74, 59, 47, 0.08));
+  }
+}
+
+@keyframes seal-glow {
+  0% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+
+.animate-rise-slow {
+  animation: rise-slow 900ms ease both;
+}
+
+.animate-float-in {
+  animation: float-in 900ms ease both;
+  animation-timeline: view();
+  animation-range: entry 8% cover 32%;
+}
+
+.animate-soft-zoom {
+  animation: soft-zoom 900ms ease both;
+  animation-timeline: view();
+  animation-range: entry 8% cover 34%;
+}
+
+@supports not (animation-timeline: view()) {
+  .animate-float-in,
+  .animate-soft-zoom {
+    animation-timeline: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .invitation-scroll {
+    scroll-snap-type: y mandatory;
+  }
+
+  .invitation-scene .scene-image {
+    width: auto;
+    max-width: none;
+    height: 100svh;
+    object-fit: cover;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}

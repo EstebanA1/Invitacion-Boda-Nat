@@ -1,0 +1,6 @@
+{
+  "name": "Invitación de Boda Gabriel y Natalia",
+  "description": "Invitación digital interactiva de boda para Gabriel y Natalia con RSVP, control de alergias alimentarias, cuenta regresiva, música de ambiente y panel de control.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
