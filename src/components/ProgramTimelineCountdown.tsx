@@ -11,7 +11,7 @@ export default function ProgramTimelineCountdown() {
 
   useEffect(() => {
     // Target Date: November 28, 2026 at 14:30
-    const targetDate = new Date("2026-11-28T14:30:00").getTime();
+    const targetDate = new Date("2026-11-28T16:30:00-03:00").getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();

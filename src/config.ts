@@ -5,7 +5,7 @@ export const weddingConfig = {
     fullNames: "Natalia Aguayo & Gabriel Figueiroa",
   },
   date: {
-    iso: "2026-11-28T14:30:00-03:00",
+    iso: "2026-11-28T16:30:00-03:00",
     label: "Sábado 28 de Noviembre de 2026",
     shortLabel: "28 de Noviembre 2026",
   },
