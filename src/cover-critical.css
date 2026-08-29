@@ -345,6 +345,46 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
   line-height: 1;
 }
 
+.music-toggle {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  display: inline-flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d8cdbf;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #78614e;
+  box-shadow: 0 12px 28px rgba(77, 74, 69, 0.16);
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.music-toggle:hover {
+  transform: scale(1.05);
+}
+
+.music-toggle.is-playing {
+  border-color: #7b9eb6;
+  background: #8eaec4;
+  color: #ffffff;
+}
+
+.music-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.music-toggle-symbol {
+  font-family: Georgia, serif;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
 .opening-card {
   display: flex;
   width: 100%;

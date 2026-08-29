@@ -2,6 +2,7 @@ import { lazy, Suspense, useState } from "react";
 
 import guideScene1 from "../../assets/invitation/guides/scene-1.png";
 import guideScene2 from "../../assets/invitation/guides/scene-2.png";
+import { playBackgroundMusic } from "../backgroundMusic";
 
 const coverEnvelope = "/invitation/cover-envelope.webp";
 const coverFlowerTop = "/invitation/cover-flower-top.webp";
@@ -30,6 +31,7 @@ function CoverScene({ onOpen, onRsvp }: { onOpen: () => void; onRsvp: () => void
   const openInvitation = () => {
     if (isPopping || isOpening) return;
 
+    void playBackgroundMusic();
     void loadJourney();
     setIsPopping(true);
     window.setTimeout(() => {

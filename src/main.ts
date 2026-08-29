@@ -1,3 +1,11 @@
+import {
+  getBackgroundMusicState,
+  playBackgroundMusic,
+  startBackgroundMusicAutomatically,
+  subscribeToBackgroundMusic,
+  toggleBackgroundMusic,
+} from './backgroundMusic';
+
 type WeddingAppModule = typeof import('./mountWeddingApp');
 
 const params = new URLSearchParams(window.location.search);
@@ -10,6 +18,7 @@ const isCoverRoute = !params.get('admin')
 
 let appModulePromise: Promise<WeddingAppModule> | null = null;
 let isMounting = false;
+let releaseStaticMusicControl = () => undefined;
 
 function prepareWeddingApp() {
   appModulePromise ??= import('./mountWeddingApp');
@@ -26,7 +35,37 @@ async function mountWeddingApp(targetId: string) {
   document.documentElement.dataset.entry = 'journey';
 
   const appModule = await prepareWeddingApp();
+  releaseStaticMusicControl();
   appModule.mountWeddingApp();
+}
+
+function bindStaticMusicControl() {
+  const button = document.getElementById('musicToggleBtn') as HTMLButtonElement | null;
+  if (!button) return () => undefined;
+
+  const renderState = ({ isPlaying, hasError }: ReturnType<typeof getBackgroundMusicState>) => {
+    const controlLabel = hasError
+      ? 'No se pudo cargar la música'
+      : isPlaying
+        ? 'Pausar música'
+        : 'Reproducir música';
+
+    button.classList.toggle('is-playing', isPlaying);
+    button.setAttribute('aria-label', controlLabel);
+    button.setAttribute('aria-pressed', String(isPlaying));
+    button.title = controlLabel;
+    button.disabled = hasError;
+  };
+  const handleClick = () => void toggleBackgroundMusic();
+  const unsubscribe = subscribeToBackgroundMusic(renderState);
+
+  button.addEventListener('click', handleClick);
+  renderState(getBackgroundMusicState());
+
+  return () => {
+    unsubscribe();
+    button.removeEventListener('click', handleClick);
+  };
 }
 
 function bindCoverInteractions() {
@@ -39,6 +78,7 @@ function bindCoverInteractions() {
   const openInvitation = () => {
     if (isOpening || !openCard) return;
     isOpening = true;
+    void playBackgroundMusic();
     openCard.disabled = true;
     if (openHint) openHint.disabled = true;
 
@@ -54,7 +94,10 @@ function bindCoverInteractions() {
 
   openCard?.addEventListener('click', openInvitation);
   openHint?.addEventListener('click', openInvitation);
-  quickRsvp?.addEventListener('click', () => void mountWeddingApp('rsvp'));
+  quickRsvp?.addEventListener('click', () => {
+    void playBackgroundMusic();
+    void mountWeddingApp('rsvp');
+  });
 }
 
 function bindDirectEnvelopeInteractions() {
@@ -80,7 +123,7 @@ function bindDirectEnvelopeInteractions() {
 
   function revealJourney(event: Event) {
     const eventTarget = event.target;
-    if (eventTarget instanceof Element && eventTarget.closest('#quick-rsvp-button')) return;
+    if (eventTarget instanceof Element && eventTarget.closest('#quick-rsvp-button, #musicToggleBtn')) return;
     mountFromPrerender('scene-envelope', true);
   }
 
@@ -94,6 +137,9 @@ function bindDirectEnvelopeInteractions() {
   window.addEventListener('keydown', revealJourney, { capture: true });
   quickRsvp?.addEventListener('click', openRsvp);
 }
+
+releaseStaticMusicControl = bindStaticMusicControl();
+startBackgroundMusicAutomatically();
 
 if (isCoverRoute) {
   bindCoverInteractions();
