@@ -379,7 +379,7 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
 
 .music-toggle.is-playing {
   border-color: #7aa99d;
-  background: rgb(182 255 232 / 0.82);
+  background: #dff5ee;
   color: #4f756c;
 }
 
