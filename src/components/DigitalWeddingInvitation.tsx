@@ -15,57 +15,11 @@ import {
 } from "lucide-react";
 import { Guest } from "../types";
 import { weddingConfig } from "../config";
-
-import coverFlowerTop from "../../assets/invitation/optimized/cover-flower-top.webp";
-import coverFlowerBottom from "../../assets/invitation/optimized/cover-flower-bottom.webp";
-import coverSeal from "../../assets/invitation/optimized/cover-seal.webp";
-import coverBouquet from "../../assets/invitation/optimized/cover-bouquet.webp";
-import goldDividerMain from "../../assets/invitation/optimized/gold-divider-main.webp";
-import goldDividerSmall from "../../assets/invitation/optimized/gold-divider-small.webp";
-import mintHeartDivider from "../../assets/invitation/optimized/heart-divider.webp";
-import greenOvalFrame from "../../assets/invitation/optimized/blessing-frame.webp";
-import formalPhoto from "../../assets/invitation/optimized/formal-photo.webp";
-import dateFrame from "../../assets/invitation/optimized/date-frame.webp";
-import dateFlower from "../../assets/invitation/optimized/date-flower.webp";
-import handwrittenPaperFallback from "../../assets/invitation/optimized/handwritten-paper.webp";
-import bancoEstado from "../../assets/invitation/optimized/bank.webp";
-import giftNapkinFallback from "../../assets/invitation/optimized/gift-card.webp";
-import guideScene1 from "../../assets/invitation/guides/scene-1.png";
-import guideScene2 from "../../assets/invitation/guides/scene-2.png";
-import guideScene3 from "../../assets/invitation/guides/scene-3.png";
-import guideScene4 from "../../assets/invitation/guides/scene-4.png";
-import guideScene5 from "../../assets/invitation/guides/scene-5.png";
+import { invitationAssets } from "../invitationAssets";
 
 type Attendance = Guest["attendance"];
 
-const coverEnvelope = "/invitation/cover-envelope.webp";
-const sceneAssetRoot = "/invitation/scene";
-const envelopeAssets = {
-  desktop: {
-    back: `${sceneAssetRoot}/envelope-back.webp`,
-    front: `${sceneAssetRoot}/envelope-front.webp`,
-    photo: `${sceneAssetRoot}/envelope-photo.webp`,
-    pearls: `${sceneAssetRoot}/envelope-pearls.webp`,
-  },
-  mobile: {
-    back: `${sceneAssetRoot}/envelope-back-mobile.webp`,
-    front: `${sceneAssetRoot}/envelope-front-mobile.webp`,
-    photo: `${sceneAssetRoot}/envelope-photo-mobile.webp`,
-    pearls: `${sceneAssetRoot}/envelope-pearls-mobile.webp`,
-  },
-};
-const programEnvelope = `${sceneAssetRoot}/program-envelope.avif`;
-const programEnvelopeFallback = `${sceneAssetRoot}/program-envelope.webp`;
-const laceNapkinOptimized = `${sceneAssetRoot}/program-frame.avif`;
-const laceNapkinFallback = `${sceneAssetRoot}/program-frame.webp`;
-const envelopeSeal = `${sceneAssetRoot}/program-seal.avif`;
-const envelopeSealFallback = `${sceneAssetRoot}/program-seal.webp`;
-const locationFrame = `${sceneAssetRoot}/location-frame.avif`;
-const locationFrameFallback = `${sceneAssetRoot}/location-frame.webp`;
-const whiteRoseSpray = `${sceneAssetRoot}/rose-spray.avif`;
-const whiteRoseSprayFallback = `${sceneAssetRoot}/rose-spray.webp`;
-const handwrittenPaper = `${sceneAssetRoot}/handwritten-paper.avif`;
-const giftNapkin = `${sceneAssetRoot}/gift-card.avif`;
+const { cover, envelope: envelopeAssets, date, blessing, details, gifts, program, guides } = invitationAssets;
 
 type DeferredImageProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> & {
   src: string;
@@ -119,7 +73,7 @@ function DeferredImage({
       ref={imageRef}
       src={shouldLoad ? src : undefined}
       data-deferred-src={shouldLoad ? undefined : src}
-      loading={loading ?? (priority ? "eager" : "lazy")}
+      loading={loading ?? "eager"}
       decoding={decoding ?? (priority ? "sync" : "async")}
       fetchPriority={fetchPriority ?? (priority ? "high" : "auto")}
       onError={(event) => {
@@ -157,12 +111,12 @@ const dietaryOptions = [
 ];
 
 const schedule = [
-  { time: weddingConfig.ceremony.time, title: "Ceremonia religiosa", image: `${sceneAssetRoot}/church.avif`, fallbackImage: `${sceneAssetRoot}/church.webp` },
-  { time: weddingConfig.reception.time, title: "Recepción centro de evento", image: `${sceneAssetRoot}/welcome.avif`, fallbackImage: `${sceneAssetRoot}/welcome.webp` },
-  { time: "17:00 p.m", title: "Cóctel y brindis con los novios", image: `${sceneAssetRoot}/toast.avif`, fallbackImage: `${sceneAssetRoot}/toast.webp` },
-  { time: "18:15 p.m", title: "Inicio cena del banquete", image: `${sceneAssetRoot}/dinner.avif`, fallbackImage: `${sceneAssetRoot}/dinner.webp` },
-  { time: "21:00 p.m", title: "Dinámicas y corte del pastel", image: `${sceneAssetRoot}/cake.avif`, fallbackImage: `${sceneAssetRoot}/cake.webp` },
-  { time: "00:30 a.m", title: "Fin de la celebración", image: `${sceneAssetRoot}/car.avif`, fallbackImage: `${sceneAssetRoot}/car.webp` },
+  { time: weddingConfig.ceremony.time, title: "Ceremonia religiosa", image: program.icons.church },
+  { time: weddingConfig.reception.time, title: "Recepción centro de evento", image: program.icons.welcome },
+  { time: "17:00 p.m", title: "Cóctel y brindis con los novios", image: program.icons.toast },
+  { time: "18:15 p.m", title: "Inicio cena del banquete", image: program.icons.dinner },
+  { time: "21:00 p.m", title: "Dinámicas y corte del pastel", image: program.icons.cake },
+  { time: "00:30 a.m", title: "Fin de la celebración", image: program.icons.car },
 ];
 
 const locations = [
@@ -208,6 +162,26 @@ function getStoredGuests(): Guest[] {
 
 function saveStoredGuests(guests: Guest[]) {
   localStorage.setItem(weddingConfig.rsvp.localStorageKey, JSON.stringify(guests));
+}
+
+function getRsvpCompletionKey(invitationType: "1" | "2") {
+  return `${weddingConfig.rsvp.localStorageKey}_completed_${invitationType}`;
+}
+
+function hasCompletedRsvp(invitationType: "1" | "2") {
+  try {
+    return localStorage.getItem(getRsvpCompletionKey(invitationType)) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function markRsvpAsCompleted(invitationType: "1" | "2") {
+  try {
+    localStorage.setItem(getRsvpCompletionKey(invitationType), "true");
+  } catch {
+    // The success screen still prevents another response during this visit.
+  }
 }
 
 function toGuestRow(guest: Guest) {
@@ -284,7 +258,7 @@ function StatCard({ id, label, value }: { id: string; label: string; value: stri
   );
 }
 
-function CountdownAndGifts({ priority = false }: { priority?: boolean }) {
+function CountdownAndGifts({ priority = false, directInitial = false }: { priority?: boolean; directInitial?: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isActive, setIsActive] = useState(false);
   const countdown = useCountdown(isActive);
@@ -322,7 +296,7 @@ function CountdownAndGifts({ priority = false }: { priority?: boolean }) {
   };
 
   return (
-    <section ref={sectionRef} id="scene-countdown" className="countdown-gifts-scene content-scene bg-envelope-paper" data-scene="countdown-gifts">
+    <section ref={sectionRef} id="scene-countdown" className={`countdown-gifts-scene content-scene bg-envelope-paper${directInitial ? " direct-initial-scene" : ""}`} data-scene="countdown-gifts">
       <div id="countdown-gifts-canvas" className="countdown-gifts-composition" data-group="content">
         <div id="countdown-heading" className="countdown-reference-heading" data-group="countdown">
           <p id="countdown-ready" className="countdown-ready">Prepárate!</p>
@@ -340,7 +314,7 @@ function CountdownAndGifts({ priority = false }: { priority?: boolean }) {
         </div>
 
         <div id="gift-card" className="gift-card-composition" data-group="gifts">
-          <DeferredImage id="gift-card-lace" className="gift-card-lace" src={giftNapkin} fallbackSrc={giftNapkinFallback} alt="" rootMargin="0px" priority={priority} />
+          <DeferredImage id="gift-card-lace" className="gift-card-lace" src={gifts.card} alt="" rootMargin="0px" priority={priority} />
           <div id="gift-card-content" className="gift-card-content">
             <h2 id="gift-title" className="gift-title">Regalos</h2>
 
@@ -364,7 +338,7 @@ function CountdownAndGifts({ priority = false }: { priority?: boolean }) {
               <h3>Cuenta Bancaria</h3>
               <p className="gift-account-name">Natalia Abigail Aguayo Gutierrez</p>
               <div className="gift-bank-row">
-                <DeferredImage src={bancoEstado} alt="BancoEstado" rootMargin="0px" />
+                <DeferredImage src={gifts.bank} alt="BancoEstado" rootMargin="0px" />
                 <strong>20.125.488-4</strong>
               </div>
               <button id="gift-copy-button" type="button" className="gift-copy-button" onClick={copyBankDetails}>
@@ -400,6 +374,8 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
   );
   const isInitialScene = (...sceneIds: string[]) => sceneIds.includes(initialTargetId);
   const shouldRenderScene = (sceneId: string) => renderFullJourney || initialTargetId === sceneId;
+  const sceneClassName = (baseClassName: string, sceneId: string) =>
+    `${baseClassName}${isDirectJourneyEntry && isInitialScene(sceneId) ? " direct-initial-scene" : ""}`;
 
   useLayoutEffect(() => {
     if (!isInvitationReady) return;
@@ -523,7 +499,7 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
             title="Abrir invitación"
           >
             <div id="cover-canvas" className="layered-scene cover-composition" aria-hidden="true">
-              <img id="cover-flower-top" className="cover-floral cover-floral-top" data-group="decoration" src={coverFlowerTop} alt="" decoding="async" />
+              <img id="cover-flower-top" className="cover-floral cover-floral-top" data-group="decoration" src={cover.desktop.flowerTop} alt="" decoding="async" />
               <div id="cover-intro" className="cover-intro" data-group="text">
                 <span>Estás cordialmente invitado</span>
                 <span>a la boda de</span>
@@ -533,17 +509,17 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
                 <small>&amp;</small>
                 <span>Gabriel</span>
               </h1>
-              <img id="cover-envelope" className="cover-envelope" data-group="envelope" src={coverEnvelope} alt="" width="810" height="600" loading="eager" decoding="async" fetchPriority="high" />
-              <img id="cover-seal" className={`cover-seal${isPopping ? " is-popping" : ""}`} data-group="envelope" src={coverSeal} alt="" decoding="async" />
-              <img id="cover-bouquet" className="cover-bouquet" data-group="decoration" src={coverBouquet} alt="" decoding="async" />
+              <img id="cover-envelope" className="cover-envelope" data-group="envelope" src={cover.desktop.envelope} alt="" width="810" height="600" loading="eager" decoding="async" fetchPriority="high" />
+              <img id="cover-seal" className={`cover-seal${isPopping ? " is-popping" : ""}`} data-group="envelope" src={cover.desktop.seal} alt="" decoding="async" />
+              <img id="cover-bouquet" className="cover-bouquet" data-group="decoration" src={cover.desktop.bouquet} alt="" decoding="async" />
               <div id="cover-reserved" className="cover-reserved" data-group="text">
                 <span>Hemos reservado</span>
                 <strong>{invitationType}</strong>
                 <span>{invitationType === "1" ? "lugar en tu honor" : "lugares en tu honor"}</span>
               </div>
-              <img id="cover-flower-bottom" className="cover-floral cover-floral-bottom" data-group="decoration" src={coverFlowerBottom} alt="" decoding="async" />
+              <img id="cover-flower-bottom" className="cover-floral cover-floral-bottom" data-group="decoration" src={cover.desktop.flowerBottom} alt="" decoding="async" />
               {guideMode && (
-                <DeferredImage id="cover-guide" className="scene-guide" data-group="guide" src={invitationType === "2" ? guideScene2 : guideScene1} alt="" priority />
+                <DeferredImage id="cover-guide" className="scene-guide" data-group="guide" src={invitationType === "2" ? guides.two : guides.one} alt="" priority />
               )}
             </div>
           </button>
@@ -565,7 +541,7 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
         {shouldRenderScene("scene-envelope") && (
         <section
           id="scene-envelope"
-          className={`invitation-scene bg-envelope-paper${isDirectJourneyEntry && isInitialScene("scene-envelope") ? " direct-initial-scene" : ""}`}
+          className={sceneClassName("invitation-scene bg-envelope-paper", "scene-envelope")}
           data-scene="envelope"
         >
           <div id="envelope-canvas" className="layered-scene open-envelope-composition">
@@ -575,17 +551,17 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
                 <DeferredImage id="envelope-photo" src={activeEnvelopeAssets.photo} alt="Natalia y Gabriel mirándose" priority={isInitialScene("scene-envelope")} fetchPriority="auto" />
               </div>
               <DeferredImage id="envelope-front" className="open-envelope-front" data-group="envelope" src={activeEnvelopeAssets.front} alt="" priority={isInitialScene("scene-envelope")} />
-              <DeferredImage id="envelope-pearls" className="open-envelope-pearls" data-group="decoration" src={activeEnvelopeAssets.pearls} alt="" />
+              <DeferredImage id="envelope-pearls" className="open-envelope-pearls" data-group="decoration" src={activeEnvelopeAssets.pearls} alt="" priority={isInitialScene("scene-envelope")} />
             </div>
-            {guideMode && <DeferredImage id="envelope-guide" className="scene-guide" data-group="guide" src={guideScene3} alt="" />}
+            {guideMode && <DeferredImage id="envelope-guide" className="scene-guide" data-group="guide" src={guides.envelope} alt="" />}
           </div>
         </section>
         )}
 
         {shouldRenderScene("scene-date") && (
-        <section id="scene-date" className="invitation-scene bg-date-paper" data-scene="date">
+        <section id="scene-date" className={sceneClassName("invitation-scene bg-date-paper", "scene-date")} data-scene="date">
           <div id="date-canvas" className="layered-scene date-card-composition">
-            <DeferredImage id="date-frame" className="date-card-frame layer-reveal" data-group="frame" src={dateFrame} alt="Marco decorativo" priority={isInitialScene("scene-date")} />
+            <DeferredImage id="date-frame" className="date-card-frame layer-reveal" data-group="frame" src={date.frame} alt="Marco decorativo" priority={isInitialScene("scene-date")} />
             <div id="date-copy" className="date-card-copy layer-reveal-delay" data-group="text">
               <div id="date-card-body" className="date-card-body">
                 <div id="date-names" className="date-card-names">
@@ -593,57 +569,57 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
                   <small id="date-ampersand" className="date-card-ampersand">&amp;</small>
                   <span id="date-groom-name" className="date-card-name date-card-name-groom">Gabriel Figueroa</span>
                 </div>
-                <DeferredImage id="date-divider-main" className="date-card-main-divider" data-group="decoration" src={goldDividerMain} alt="" />
+                <DeferredImage id="date-divider-main" className="date-card-main-divider" data-group="decoration" src={date.dividerMain} alt="" />
                 <div id="date-row" className="date-card-date">
                   <div id="date-weekday" className="date-card-side">
-                    <DeferredImage id="date-weekday-divider-top" className="gold-divider-sm" src={goldDividerSmall} alt="" />
+                    <DeferredImage id="date-weekday-divider-top" className="gold-divider-sm" src={date.dividerSmall} alt="" />
                     <span id="date-weekday-label">Sábado</span>
-                    <DeferredImage id="date-weekday-divider-bottom" className="gold-divider-sm" src={goldDividerSmall} alt="" />
+                    <DeferredImage id="date-weekday-divider-bottom" className="gold-divider-sm" src={date.dividerSmall} alt="" />
                   </div>
                   <strong id="date-day" className="date-card-day">28</strong>
                   <div id="date-month" className="date-card-side">
-                    <DeferredImage id="date-month-divider-top" className="gold-divider-sm" src={goldDividerSmall} alt="" />
+                    <DeferredImage id="date-month-divider-top" className="gold-divider-sm" src={date.dividerSmall} alt="" />
                     <span id="date-month-label">Noviembre</span>
-                    <DeferredImage id="date-month-divider-bottom" className="gold-divider-sm" src={goldDividerSmall} alt="" />
+                    <DeferredImage id="date-month-divider-bottom" className="gold-divider-sm" src={date.dividerSmall} alt="" />
                   </div>
                 </div>
                 <p id="date-year" className="date-card-year"><strong id="date-year-label">2026</strong></p>
               </div>
               <p id="date-quote" className="date-card-quote">El amor nos unió y queremos compartir contigo el día más importante de nuestras vidas.</p>
             </div>
-            <DeferredImage id="date-flower" className="date-card-flower layer-reveal-late" data-group="decoration" src={dateFlower} alt="" />
-            {guideMode && <DeferredImage id="date-guide" className="scene-guide" data-group="guide" src={guideScene4} alt="" />}
+            <DeferredImage id="date-flower" className="date-card-flower layer-reveal-late" data-group="decoration" src={date.flower} alt="" />
+            {guideMode && <DeferredImage id="date-guide" className="scene-guide" data-group="guide" src={guides.date} alt="" />}
           </div>
         </section>
         )}
 
         {shouldRenderScene("scene-blessing") && (
-        <section id="scene-blessing" className="invitation-scene bg-mint-photo" data-scene="blessing">
+        <section id="scene-blessing" className={sceneClassName("invitation-scene bg-mint-photo", "scene-blessing")} data-scene="blessing">
           <div id="blessing-canvas" className="layered-scene blessing-composition">
-            <DeferredImage id="blessing-frame" className="oval-frame layer-reveal" data-group="frame" src={greenOvalFrame} alt="Marco ovalado verde" priority={isInitialScene("scene-blessing")} />
+            <DeferredImage id="blessing-frame" className="oval-frame layer-reveal" data-group="frame" src={blessing.frame} alt="Marco ovalado verde" priority={isInitialScene("scene-blessing")} />
             <div id="blessing-photo-frame" className="oval-photo-frame layer-reveal-delay" data-group="photo">
-              <DeferredImage id="blessing-photo" src={formalPhoto} alt="Natalia y Gabriel" priority={isInitialScene("scene-blessing")} />
+              <DeferredImage id="blessing-photo" src={blessing.photo} alt="Natalia y Gabriel" priority={isInitialScene("scene-blessing")} />
             </div>
             <div id="blessing-copy" className="blessing-copy layer-reveal-late" data-group="text">
               <span>Con la bendición de Dios y<br />de nuestras familias</span>
               <strong>¡Nos casamos!</strong>
             </div>
-            <DeferredImage id="blessing-heart-divider" className="blessing-heart-divider" data-group="decoration" src={mintHeartDivider} alt="" />
-            {guideMode && <DeferredImage id="blessing-guide" className="scene-guide" data-group="guide" src={guideScene5} alt="" />}
+            <DeferredImage id="blessing-heart-divider" className="blessing-heart-divider" data-group="decoration" src={blessing.divider} alt="" />
+            {guideMode && <DeferredImage id="blessing-guide" className="scene-guide" data-group="guide" src={guides.blessing} alt="" />}
           </div>
         </section>
         )}
 
         {shouldRenderScene("scene-details") && (
-        <section id="scene-details" className="details-scene content-scene bg-envelope-paper" data-scene="details" aria-label="Información de la ceremonia y la recepción">
+        <section id="scene-details" className={sceneClassName("details-scene content-scene bg-envelope-paper", "scene-details")} data-scene="details" aria-label="Información de la ceremonia y la recepción">
           <div id="details-canvas" className="details-composition" data-group="content">
-            <DeferredImage id="details-paper-top" className="details-paper details-paper-top" data-group="decoration" src={handwrittenPaper} fallbackSrc={handwrittenPaperFallback} alt="" />
-            <DeferredImage id="details-paper-bottom" className="details-paper details-paper-bottom" data-group="decoration" src={handwrittenPaper} fallbackSrc={handwrittenPaperFallback} alt="" />
+            <DeferredImage id="details-paper-top" className="details-paper details-paper-top" data-group="decoration" src={details.handwrittenPaper} alt="" />
+            <DeferredImage id="details-paper-bottom" className="details-paper details-paper-bottom" data-group="decoration" src={details.handwrittenPaper} alt="" />
 
             <div id="details-locations" className="location-stack" data-group="locations">
               {locations.map((item) => (
                 <article id={`location-${item.id}`} key={item.id} className={`location-panel location-panel-${item.id}`} data-group="location">
-                  <DeferredImage id={`location-${item.id}-frame`} className="location-panel-frame" data-group="frame" src={locationFrame} fallbackSrc={locationFrameFallback} alt="" priority={isInitialScene("scene-details")} />
+                  <DeferredImage id={`location-${item.id}-frame`} className="location-panel-frame" data-group="frame" src={details.locationFrame} alt="" priority={isInitialScene("scene-details")} />
                   <div id={`location-${item.id}-content`} className="location-panel-content" data-group="text">
                     <h2 id={`location-${item.id}-title`} className="location-heading">{item.title}</h2>
                     <p id={`location-${item.id}-time`} className="location-time">{item.time}</p>
@@ -662,15 +638,15 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
               ))}
             </div>
 
-            <DeferredImage id="details-rose-spray" className="details-rose-spray" data-group="decoration" src={whiteRoseSpray} fallbackSrc={whiteRoseSprayFallback} alt="" />
+            <DeferredImage id="details-rose-spray" className="details-rose-spray" data-group="decoration" src={details.roseSpray} alt="" />
           </div>
         </section>
         )}
 
-        {shouldRenderScene("scene-countdown") && <CountdownAndGifts priority={isInitialScene("scene-countdown")} />}
+        {shouldRenderScene("scene-countdown") && <CountdownAndGifts priority={isInitialScene("scene-countdown")} directInitial={isDirectJourneyEntry && isInitialScene("scene-countdown")} />}
 
         {shouldRenderScene("scene-program") && (
-        <section id="scene-program" className="program-scene content-scene bg-envelope-paper" data-scene="program">
+        <section id="scene-program" className={sceneClassName("program-scene content-scene bg-envelope-paper", "scene-program")} data-scene="program">
           <div id="program-canvas" className="program-composition" data-group="content">
             <div id="dress-code" className="dress-code" data-group="text">
               <p id="dress-code-kicker" className="dress-code-kicker">Dress Code</p>
@@ -680,10 +656,10 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
               </p>
             </div>
 
-            <DeferredImage id="program-envelope" className="program-envelope" data-group="decoration" src={programEnvelope} fallbackSrc={programEnvelopeFallback} alt="" priority={isInitialScene("scene-program")} />
+            <DeferredImage id="program-envelope" className="program-envelope" data-group="decoration" src={program.envelope} alt="" priority={isInitialScene("scene-program")} />
             <div id="program-card-group" className="program-card-group" data-group="program-card">
-              <DeferredImage id="program-frame" className="program-frame" data-group="frame" src={laceNapkinOptimized} fallbackSrc={laceNapkinFallback} alt="" priority={isInitialScene("scene-program")} />
-              <DeferredImage id="program-seal" className="program-seal" data-group="decoration" src={envelopeSeal} fallbackSrc={envelopeSealFallback} alt="" priority={isInitialScene("scene-program")} />
+              <DeferredImage id="program-frame" className="program-frame" data-group="frame" src={program.frame} alt="" priority={isInitialScene("scene-program")} />
+              <DeferredImage id="program-seal" className="program-seal" data-group="decoration" src={program.seal} alt="" priority={isInitialScene("scene-program")} />
 
               <div id="program-content" className="program-content" data-group="timeline">
                 <h2 id="program-title" className="program-title">Programa</h2>
@@ -691,7 +667,7 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
                   {schedule.map((item, index) => {
                     return (
                       <div id={`timeline-item-${index + 1}`} key={`${item.time}-${item.title}`} className="program-row">
-                        <DeferredImage className="program-icon" src={item.image} fallbackSrc={item.fallbackImage} alt="" aria-hidden="true" priority={isInitialScene("scene-program")} />
+                        <DeferredImage className="program-icon" src={item.image} alt="" aria-hidden="true" priority={isInitialScene("scene-program")} />
                         <span className="program-line" aria-hidden="true" />
                         <div className="program-row-copy">
                           <time className="program-time">{item.time}</time>
@@ -708,7 +684,7 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
         )}
 
         {shouldRenderScene("rsvp") && (
-          <RsvpSection invitationType={invitationType} onGuestAdded={addGuest} />
+          <RsvpSection invitationType={invitationType} onGuestAdded={addGuest} directInitial={isDirectJourneyEntry && isInitialScene("rsvp")} />
         )}
 
         {isAdmin && renderFullJourney && (
@@ -724,9 +700,11 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
 function RsvpSection({
   invitationType,
   onGuestAdded,
+  directInitial = false,
 }: {
   invitationType: "1" | "2";
   onGuestAdded: (guest: Guest) => void;
+  directInitial?: boolean;
 }) {
   const [name, setName] = useState("");
   const [attendance, setAttendance] = useState<Attendance>("Asistirá");
@@ -734,7 +712,9 @@ function RsvpSection({
   const [phone, setPhone] = useState("");
   const [dietary, setDietary] = useState<string[]>([]);
   const [details, setDetails] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
+    () => hasCompletedRsvp(invitationType) ? "done" : "idle",
+  );
 
   const maxCompanions = invitationType === "2" ? 1 : 0;
 
@@ -754,7 +734,7 @@ function RsvpSection({
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!name.trim()) return;
+    if (!name.trim() || status === "sending" || hasCompletedRsvp(invitationType)) return;
 
     setStatus("sending");
 
@@ -770,10 +750,6 @@ function RsvpSection({
       createdAt: new Date().toISOString(),
       isSynced: false,
     };
-
-    const stored = [guest, ...getStoredGuests()];
-    saveStoredGuests(stored);
-    onGuestAdded(guest);
 
     if (!weddingConfig.rsvp.scriptUrl) {
       setStatus("error");
@@ -792,6 +768,8 @@ function RsvpSection({
         body: formData,
       });
 
+      onGuestAdded(guest);
+      markRsvpAsCompleted(invitationType);
       setStatus("done");
     } catch (error) {
       console.warn("No se pudo enviar a Google Sheets:", error);
@@ -799,18 +777,8 @@ function RsvpSection({
     }
   };
 
-  const reset = () => {
-    setName("");
-    setAttendance("Asistirá");
-    setCompanions(maxCompanions);
-    setPhone("");
-    setDietary([]);
-    setDetails("");
-    setStatus("idle");
-  };
-
   return (
-    <section id="rsvp" className="rsvp-section content-scene bg-envelope-paper" data-scene="rsvp">
+    <section id="rsvp" className={`rsvp-section content-scene bg-envelope-paper${directInitial ? " direct-initial-scene" : ""}`} data-scene="rsvp">
       <div id="rsvp-content" className="rsvp-inner" data-group="content">
         <div id="rsvp-heading" className="section-heading">
           <p id="rsvp-kicker" className="section-kicker">Confirmar asistencia</p>
@@ -829,16 +797,8 @@ function RsvpSection({
               <CheckCircle2 className="success-icon" />
               <h3 className="success-title">Respuesta registrada</h3>
               <p className="success-copy">
-                Muchas gracias. Tu confirmación fue guardada para Natalia y Gabriel.
+                Muchas gracias. Esta invitación ya registró su respuesta para Natalia y Gabriel.
               </p>
-              <button
-                id="rsvp-reset"
-                type="button"
-                onClick={reset}
-                className="secondary-button"
-              >
-                Registrar otra respuesta
-              </button>
             </div>
           ) : (
             <form id="rsvp-form" onSubmit={submit} className="rsvp-form">
@@ -929,7 +889,7 @@ function RsvpSection({
 
               {status === "error" && (
                 <p id="rsvp-error" className="form-alert">
-                  No pude confirmar la conexión con Google Sheets. Dejé una copia local en este navegador para respaldo.
+                  No se pudo enviar la respuesta. Revisa tu conexión e inténtalo nuevamente.
                 </p>
               )}
 

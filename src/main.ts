@@ -5,6 +5,11 @@ import {
   subscribeToBackgroundMusic,
   toggleBackgroundMusic,
 } from './backgroundMusic';
+import {
+  getResponsiveEnvelopeAssets,
+  preloadImageSources,
+  waitForImagesWithin,
+} from './invitationAssets';
 
 type WeddingAppModule = typeof import('./mountWeddingApp');
 
@@ -75,14 +80,20 @@ function bindCoverInteractions() {
   const seal = document.getElementById('cover-seal');
   let isOpening = false;
 
-  const openInvitation = () => {
+  const openInvitation = async () => {
     if (isOpening || !openCard) return;
     isOpening = true;
     void playBackgroundMusic();
     openCard.disabled = true;
     if (openHint) openHint.disabled = true;
 
-    void prepareWeddingApp();
+    const coverCanvas = document.getElementById('cover-canvas');
+    if (coverCanvas) await waitForImagesWithin(coverCanvas, 1000);
+
+    void Promise.allSettled([
+      prepareWeddingApp(),
+      preloadImageSources(Object.values(getResponsiveEnvelopeAssets())),
+    ]);
     seal?.classList.add('is-popping');
 
     window.setTimeout(() => {

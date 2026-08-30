@@ -6,6 +6,12 @@
   font-weight: 400;
 }
 
+:root {
+  color-scheme: only light;
+  --page-paper: #f3f2f2;
+  --cover-paper: #f4f3f5;
+}
+
 @font-face {
   font-family: "Cormorant Garamond";
   src: url("/fonts/cormorant-garamond-latin.woff2") format("woff2");
@@ -31,15 +37,15 @@
 
 html {
   scroll-behavior: smooth;
-  background: #f3f2f2;
-  color-scheme: light;
+  background: var(--page-paper);
+  color-scheme: only light;
 }
 
 body {
   margin: 0;
   overflow-x: hidden;
-  background: #f3f2f2;
-  color-scheme: light;
+  background: var(--page-paper);
+  color-scheme: only light;
 }
 
 button {
@@ -47,6 +53,7 @@ button {
   padding: 0;
   font: inherit;
   color: inherit;
+  color-scheme: only light;
 }
 
 img {
@@ -54,6 +61,7 @@ img {
   max-width: 100%;
   height: auto;
   vertical-align: middle;
+  background-color: transparent;
 }
 
 html[data-entry="journey"] #scene-cover {
@@ -70,9 +78,10 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
 
 .wedding-invitation {
   min-height: 100vh;
-  background: #f3f2f1;
+  background: var(--page-paper);
   color: #4d4a45;
   font-family: Arial, sans-serif;
+  color-scheme: only light;
 }
 
 .invitation-scroll {
@@ -109,7 +118,7 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
 }
 
 .bg-envelope-paper {
-  background: #f3f2f2;
+  background: var(--page-paper);
 }
 
 .static-envelope-layer,
@@ -186,7 +195,7 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
 
 .bg-cover-paper,
 .bg-paper-glow {
-  background: #f4f3f5;
+  background: var(--cover-paper);
 }
 
 .bg-paper-glow {
@@ -369,9 +378,9 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
 }
 
 .music-toggle.is-playing {
-  border-color: #7b9eb6;
-  background: #8eaec4;
-  color: #ffffff;
+  border-color: #7aa99d;
+  background: rgb(182 255 232 / 0.82);
+  color: #4f756c;
 }
 
 .music-toggle:disabled {
@@ -468,6 +477,7 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
 
 .opening-card.is-opening {
   animation: open-invitation 760ms cubic-bezier(0.2, 0.72, 0.18, 1) both;
+  will-change: transform, opacity;
 }
 
 .opening-card.is-opening::before {
@@ -478,17 +488,14 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
   0% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: drop-shadow(0 18px 34px rgba(74, 59, 47, 0.14));
   }
   42% {
     opacity: 1;
-    transform: translateY(-18px) scale(1.035) rotateX(4deg);
-    filter: drop-shadow(0 28px 44px rgba(74, 59, 47, 0.18));
+    transform: translateY(-18px) scale(1.035);
   }
   100% {
     opacity: 0;
     transform: translateY(-92px) scale(1.08);
-    filter: drop-shadow(0 34px 58px rgba(74, 59, 47, 0.08));
   }
 }
 
@@ -517,6 +524,23 @@ html[data-entry="journey"][data-entry-target="scene-envelope"] #scene-envelope-p
 @media (max-width: 640px) {
   .invitation-scroll {
     scroll-snap-type: y mandatory;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  #root,
+  .wedding-invitation,
+  .bg-envelope-paper {
+    background: var(--page-paper);
+    color: #4d4a45;
+    color-scheme: only light;
+  }
+
+  .bg-cover-paper,
+  .bg-paper-glow {
+    background: var(--cover-paper);
   }
 }
 

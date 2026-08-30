@@ -1,14 +1,14 @@
 import { lazy, Suspense, useState } from "react";
 
-import guideScene1 from "../../assets/invitation/guides/scene-1.png";
-import guideScene2 from "../../assets/invitation/guides/scene-2.png";
 import { playBackgroundMusic } from "../backgroundMusic";
+import {
+  getResponsiveCoverAssets,
+  getResponsiveEnvelopeAssets,
+  invitationAssets,
+  preloadImageSources,
+  waitForImagesWithin,
+} from "../invitationAssets";
 
-const coverEnvelope = "/invitation/cover-envelope.webp";
-const coverFlowerTop = "/invitation/cover-flower-top.webp";
-const coverFlowerBottom = "/invitation/cover-flower-bottom.webp";
-const coverSeal = "/invitation/cover-seal.webp";
-const coverBouquet = "/invitation/cover-bouquet.webp";
 const loadJourney = () => import("./DigitalWeddingInvitation");
 const WeddingJourney = lazy(loadJourney);
 
@@ -25,19 +25,27 @@ function shouldShowJourneyInitially(): boolean {
 function CoverScene({ onOpen, onRsvp }: { onOpen: () => void; onRsvp: () => void }) {
   const invitationType = getInvitationType();
   const guideMode = new URLSearchParams(window.location.search).get("guide") === "1";
+  const coverAssets = getResponsiveCoverAssets();
   const [isPopping, setIsPopping] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
 
-  const openInvitation = () => {
+  const openInvitation = async () => {
     if (isPopping || isOpening) return;
 
     void playBackgroundMusic();
-    void loadJourney();
+    const coverCanvas = document.getElementById("cover-canvas");
+    const envelopeSources = Object.values(getResponsiveEnvelopeAssets());
+    const journeyReady = Promise.allSettled([
+      loadJourney(),
+      preloadImageSources(envelopeSources),
+    ]);
+
+    if (coverCanvas) await waitForImagesWithin(coverCanvas, 1000);
     setIsPopping(true);
     window.setTimeout(() => {
       setIsPopping(false);
       setIsOpening(true);
-      window.setTimeout(onOpen, 760);
+      window.setTimeout(() => void journeyReady.then(onOpen), 760);
     }, 430);
   };
 
@@ -67,7 +75,7 @@ function CoverScene({ onOpen, onRsvp }: { onOpen: () => void; onRsvp: () => void
             title="Abrir invitación"
           >
             <div id="cover-canvas" className="layered-scene cover-composition" aria-hidden="true">
-              <img id="cover-flower-top" className="cover-floral cover-floral-top" data-group="decoration" src={coverFlowerTop} alt="" decoding="async" />
+              <img id="cover-flower-top" className="cover-floral cover-floral-top" data-group="decoration" src={coverAssets.flowerTop} alt="" decoding="async" />
               <div id="cover-intro" className="cover-intro" data-group="text">
                 <span>Estás cordialmente invitado</span>
                 <span>a la boda de</span>
@@ -81,7 +89,7 @@ function CoverScene({ onOpen, onRsvp }: { onOpen: () => void; onRsvp: () => void
                 id="cover-envelope"
                 className="cover-envelope"
                 data-group="envelope"
-                src={coverEnvelope}
+                src={coverAssets.envelope}
                 alt=""
                 width="600"
                 height="444"
@@ -89,16 +97,16 @@ function CoverScene({ onOpen, onRsvp }: { onOpen: () => void; onRsvp: () => void
                 decoding="async"
                 fetchPriority="high"
               />
-              <img id="cover-seal" className={`cover-seal${isPopping ? " is-popping" : ""}`} data-group="envelope" src={coverSeal} alt="" decoding="async" />
-              <img id="cover-bouquet" className="cover-bouquet" data-group="decoration" src={coverBouquet} alt="" decoding="async" />
+              <img id="cover-seal" className={`cover-seal${isPopping ? " is-popping" : ""}`} data-group="envelope" src={coverAssets.seal} alt="" decoding="async" />
+              <img id="cover-bouquet" className="cover-bouquet" data-group="decoration" src={coverAssets.bouquet} alt="" decoding="async" />
               <div id="cover-reserved" className="cover-reserved" data-group="text">
                 <span>Hemos reservado</span>
                 <strong id="cover-place-count">{invitationType}</strong>
                 <span id="cover-place-label">{invitationType === "1" ? "lugar en tu honor" : "lugares en tu honor"}</span>
               </div>
-              <img id="cover-flower-bottom" className="cover-floral cover-floral-bottom" data-group="decoration" src={coverFlowerBottom} alt="" decoding="async" />
+              <img id="cover-flower-bottom" className="cover-floral cover-floral-bottom" data-group="decoration" src={coverAssets.flowerBottom} alt="" decoding="async" />
               {guideMode && (
-                <img id="cover-guide" className="scene-guide" data-group="guide" src={invitationType === "2" ? guideScene2 : guideScene1} alt="" loading="lazy" decoding="async" />
+                <img id="cover-guide" className="scene-guide" data-group="guide" src={invitationType === "2" ? invitationAssets.guides.two : invitationAssets.guides.one} alt="" loading="lazy" decoding="async" />
               )}
             </div>
           </button>

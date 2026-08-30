@@ -79,17 +79,29 @@
   --font-sans: "Montserrat", sans-serif;
 }
 
+:root {
+  color-scheme: only light;
+  --page-paper: #f3f2f2;
+  --cover-paper: #f4f3f5;
+  --celebration-mint: rgb(182 255 232 / 0.75);
+}
+
 html {
   scroll-behavior: smooth;
-  background: #f3f2f2;
-  color-scheme: light;
+  background: var(--page-paper);
+  color-scheme: only light;
 }
 
 body {
   margin: 0;
   overflow-x: hidden;
-  background: #f3f2f2;
-  color-scheme: light;
+  background: var(--page-paper);
+  color-scheme: only light;
+}
+
+#root,
+img {
+  background-color: transparent;
 }
 
 button,
@@ -97,6 +109,7 @@ input,
 select,
 textarea {
   font: inherit;
+  color-scheme: only light;
 }
 
 .invitation-scroll {
@@ -345,6 +358,7 @@ textarea {
   --date-scene-footer: clamp(1rem, 3vw, 2rem);
   min-height: max(100svh, calc(var(--date-scene-height) + var(--date-scene-footer)));
   overflow: hidden;
+  background: var(--celebration-mint);
 }
 
 .date-card-composition {
@@ -499,11 +513,11 @@ textarea {
   --blessing-divider-shift: clamp(2rem, 4svh, 3.5rem);
   min-height: calc(100svh + var(--blessing-divider-shift));
   align-items: flex-start;
-  background: #e2f5f1;
+  background: var(--celebration-mint);
 }
 
 .blessing-composition {
-  background: #e2f5f1;
+  background: transparent;
 }
 
 .oval-frame {
@@ -523,7 +537,7 @@ textarea {
   height: 55.2%;
   overflow: hidden;
   border-radius: 50%;
-  background: #e2f5f1;
+  background: transparent;
   clip-path: ellipse(49.5% 50% at 50% 50%);
 }
 
@@ -594,9 +608,10 @@ textarea {
 
 .wedding-invitation {
   min-height: 100vh;
-  background: #f3f2f1;
+  background: var(--page-paper);
   color: #4d4a45;
   font-family: Arial, sans-serif;
+  color-scheme: only light;
 }
 
 .rsvp-section,
@@ -663,9 +678,9 @@ textarea {
 }
 
 .music-toggle.is-playing {
-  border-color: #7b9eb6;
-  background: #8eaec4;
-  color: #ffffff;
+  border-color: #7aa99d;
+  background: rgb(182 255 232 / 0.82);
+  color: #4f756c;
 }
 
 .music-toggle:disabled {
@@ -1683,31 +1698,32 @@ textarea {
   contain-intrinsic-block-size: 100svh;
 }
 
-#scene-envelope.direct-initial-scene {
+.invitation-scene.direct-initial-scene,
+.content-scene.direct-initial-scene {
   content-visibility: visible;
   contain-intrinsic-block-size: auto;
 }
 
 .bg-cover-paper {
-  background: #f4f3f5;
+  background: var(--cover-paper);
 }
 
 .bg-envelope-paper {
-  background: #f3f2f2;
+  background: var(--page-paper);
 }
 
 .bg-date-paper {
-  background: #f3f2f2;
+  background: var(--celebration-mint);
 }
 
 .bg-paper-glow {
   position: absolute;
   inset: 0;
-  background: #f4f3f5;
+  background: var(--cover-paper);
 }
 
 .bg-mint-photo {
-  background: #e2f5f1;
+  background: var(--celebration-mint);
 }
 
 .bg-soft-mint {
@@ -1737,6 +1753,7 @@ textarea {
 
 .opening-card.is-opening {
   animation: open-invitation 760ms cubic-bezier(0.2, 0.72, 0.18, 1) both;
+  will-change: transform, opacity;
 }
 
 .opening-card.is-opening::before {
@@ -1821,17 +1838,14 @@ textarea {
   0% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: drop-shadow(0 18px 34px rgba(74, 59, 47, 0.14));
   }
   42% {
     opacity: 1;
-    transform: translateY(-18px) scale(1.035) rotateX(4deg);
-    filter: drop-shadow(0 28px 44px rgba(74, 59, 47, 0.18));
+    transform: translateY(-18px) scale(1.035);
   }
   100% {
     opacity: 0;
     transform: translateY(-92px) scale(1.08);
-    filter: drop-shadow(0 34px 58px rgba(74, 59, 47, 0.08));
   }
 }
 
@@ -1918,6 +1932,33 @@ textarea {
   }
   100% {
     transform: scale(1.28);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  #root,
+  .wedding-invitation {
+    background: var(--page-paper);
+    color: #4d4a45;
+    color-scheme: only light;
+  }
+
+  .bg-cover-paper,
+  .bg-paper-glow {
+    background: var(--cover-paper);
+  }
+
+  .bg-envelope-paper {
+    background: var(--page-paper);
+  }
+
+  #scene-date,
+  #scene-blessing,
+  .bg-date-paper,
+  .bg-mint-photo {
+    background: var(--celebration-mint);
   }
 }
 

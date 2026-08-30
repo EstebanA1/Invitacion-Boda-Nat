@@ -90,23 +90,6 @@ export default function RsvpForm({ onRsvpAdded }: RsvpFormProps) {
     setSubmitSuccess(true);
   };
 
-  const handleResetForm = () => {
-    setFullName("");
-    setCompanions(0);
-    setAttendance("Asistirá");
-    setDietary({
-      gluten: false,
-      lactose: false,
-      nuts: false,
-      seafood: false,
-      vegan: false,
-      vegetarian: false,
-    });
-    setDietNotes("");
-    setSubmitSuccess(false);
-    setSubmittedName("");
-  };
-
   return (
     <section id="rsvp-section" className="py-12 scroll-mt-6">
       <div
@@ -140,13 +123,6 @@ export default function RsvpForm({ onRsvpAdded }: RsvpFormProps) {
             <p className="text-sm text-sage-700 max-w-sm mb-6">
               Tu respuesta ha sido procesada de manera segura. Se ha registrado correctamente en las listas de confirmación e intolerancias de los novios.
             </p>
-            <div className="w-12 h-[1px] bg-mint mb-6"></div>
-            <button
-              onClick={handleResetForm}
-              className="text-xs uppercase tracking-widest text-sage-500 hover:text-sage-900 underline transition-colors cursor-pointer"
-            >
-              Registrar otra respuesta
-            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
