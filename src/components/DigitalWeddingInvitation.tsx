@@ -87,6 +87,78 @@ function DeferredImage({
   );
 }
 
+function BlessingCopy() {
+  const copyRef = useRef<HTMLDivElement>(null);
+  const [isTypographyReady, setIsTypographyReady] = useState(false);
+  const [hasEnteredView, setHasEnteredView] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    let isSettled = false;
+    let revealFrame = 0;
+    let fallbackTimer = 0;
+
+    const revealWithStableTypography = () => {
+      if (cancelled || isSettled) return;
+      isSettled = true;
+      window.clearTimeout(fallbackTimer);
+      revealFrame = window.requestAnimationFrame(() => {
+        if (!cancelled) setIsTypographyReady(true);
+      });
+    };
+
+    fallbackTimer = window.setTimeout(revealWithStableTypography, 2000);
+    if ("fonts" in document) {
+      void document.fonts
+        .load('500 16px "Cormorant Garamond"')
+        .then(revealWithStableTypography, revealWithStableTypography);
+    } else {
+      revealWithStableTypography();
+    }
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallbackTimer);
+      window.cancelAnimationFrame(revealFrame);
+    };
+  }, []);
+
+  useEffect(() => {
+    const copy = copyRef.current;
+    if (!copy || !("IntersectionObserver" in window)) {
+      setHasEnteredView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setHasEnteredView(true);
+        observer.disconnect();
+      },
+      { rootMargin: "20% 0px", threshold: 0.05 },
+    );
+
+    observer.observe(copy);
+    return () => observer.disconnect();
+  }, []);
+
+  const isVisible = isTypographyReady && hasEnteredView;
+
+  return (
+    <div
+      id="blessing-copy"
+      ref={copyRef}
+      className={`blessing-copy${isVisible ? " is-visible" : ""}`}
+      data-group="text"
+      style={{ visibility: isVisible ? "visible" : "hidden" }}
+    >
+      <span>Con la bendición de Dios y<br />de nuestras familias</span>
+      <strong>¡Nos casamos!</strong>
+    </div>
+  );
+}
+
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
 
@@ -600,10 +672,7 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
             <div id="blessing-photo-frame" className="oval-photo-frame layer-reveal-delay" data-group="photo">
               <DeferredImage id="blessing-photo" src={blessing.photo} alt="Natalia y Gabriel" priority={isInitialScene("scene-blessing")} />
             </div>
-            <div id="blessing-copy" className="blessing-copy layer-reveal-late" data-group="text">
-              <span>Con la bendición de Dios y<br />de nuestras familias</span>
-              <strong>¡Nos casamos!</strong>
-            </div>
+            <BlessingCopy />
             <DeferredImage id="blessing-heart-divider" className="blessing-heart-divider" data-group="decoration" src={blessing.divider} alt="" />
             {guideMode && <DeferredImage id="blessing-guide" className="scene-guide" data-group="guide" src={guides.blessing} alt="" />}
           </div>

@@ -44,6 +44,10 @@
             ? "/invitation/scene/envelope-front-mobile.webp"
             : "/invitation/scene/envelope-front.webp";
           preloads.push([envelopeFront, "image", "image/webp", true]);
+        } else if (target === "scene-blessing") {
+          preloads.push(
+            ["/fonts/cormorant-garamond-latin.woff2", "font", "font/woff2", true],
+          );
         } else if (target === "scene-program") {
           preloads.push(
             ["/invitation/scene/program-frame.webp", "image", "image/webp", true],
