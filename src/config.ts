@@ -24,7 +24,7 @@ export const weddingConfig = {
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Verde%20Ocaso%20Lounge%20Coronel",
   },
   rsvp: {
-    deadline: "1 de Noviembre de 2026",
+    deadline: "15 de octubre de 2026",
     scriptUrl: import.meta.env.VITE_GOOGLE_SCRIPT_URL || "",
     adminKey: import.meta.env.VITE_ADMIN_KEY || "nati-admin-2026",
     localStorageKey: "nat_gabriel_rsvps_backup",

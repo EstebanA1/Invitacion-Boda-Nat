@@ -614,7 +614,10 @@ textarea {
   color-scheme: only light;
 }
 
-.rsvp-section,
+.rsvp-section {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
 .admin-section {
   font-family: "Montserrat", Arial, sans-serif;
 }
@@ -798,6 +801,12 @@ textarea {
   font-size: clamp(2.6rem, 12vw, 4rem);
   font-weight: 400;
   line-height: 1;
+}
+
+.rsvp-section .section-kicker {
+  color: var(--celebration-mint);
+  font-style: italic;
+  text-shadow: 0 1px 1px rgba(79, 117, 108, 0.82);
 }
 
 .section-title {
@@ -1550,6 +1559,19 @@ textarea {
   background: #42685f;
 }
 
+.rsvp-section .primary-button {
+  border: 1px solid #9dbfb5;
+  background: var(--celebration-mint);
+  color: #3f6259;
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.rsvp-section .primary-button:hover {
+  border-color: #79a497;
+  background: var(--celebration-mint);
+  color: #31534b;
+}
+
 .primary-button:disabled {
   cursor: wait;
   opacity: 0.6;
@@ -1768,6 +1790,14 @@ textarea {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #6f685f;
+}
+
+.rsvp-section .form-label,
+.rsvp-section input,
+.rsvp-section select,
+.rsvp-section textarea,
+.rsvp-section button {
+  font-family: "Cormorant Garamond", Georgia, serif;
 }
 
 .form-input {
