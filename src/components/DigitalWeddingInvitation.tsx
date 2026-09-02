@@ -153,8 +153,10 @@ function BlessingCopy() {
       data-group="text"
       style={{ visibility: isVisible ? "visible" : "hidden" }}
     >
-      <span>Con la bendición de Dios y<br />de nuestras familias</span>
-      <strong>¡Nos casamos!</strong>
+      <div className="blessing-copy-inner">
+        <span>Con la bendición de Dios y<br />de nuestras familias</span>
+        <strong>¡Nos casamos!</strong>
+      </div>
     </div>
   );
 }
