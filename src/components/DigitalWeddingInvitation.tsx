@@ -624,6 +624,10 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
               </div>
               <DeferredImage id="envelope-front" className="open-envelope-front" data-group="envelope" src={activeEnvelopeAssets.front} alt="" priority={isInitialScene("scene-envelope")} />
               <DeferredImage id="envelope-pearls" className="open-envelope-pearls" data-group="decoration" src={activeEnvelopeAssets.pearls} alt="" priority={isInitialScene("scene-envelope")} />
+              <blockquote id="envelope-verse" className="open-envelope-verse" data-group="text">
+                <p>“Y si alguno prevaleciere contra uno, dos le resistirán; y cordón de tres dobleces no se rompe pronto.”</p>
+                <cite>Eclesiastés 4:12</cite>
+              </blockquote>
             </div>
             {guideMode && <DeferredImage id="envelope-guide" className="scene-guide" data-group="guide" src={guides.envelope} alt="" />}
           </div>
