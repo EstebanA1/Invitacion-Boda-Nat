@@ -22,13 +22,13 @@ export const invitationAssets = {
     desktop: {
       back: `${sceneRoot}/envelope-back.webp`,
       front: `${sceneRoot}/envelope-front.webp`,
-      photo: `${sceneRoot}/envelope-photo.webp`,
+      photo: `${sceneRoot}/envelope-looking-september.webp`,
       pearls: `${sceneRoot}/envelope-pearls.webp`,
     },
     mobile: {
       back: `${sceneRoot}/envelope-back-mobile.webp`,
       front: `${sceneRoot}/envelope-front-mobile.webp`,
-      photo: `${sceneRoot}/envelope-photo-mobile.webp`,
+      photo: `${sceneRoot}/envelope-looking-september-mobile.webp`,
       pearls: `${sceneRoot}/envelope-pearls-mobile.webp`,
     },
   },
@@ -40,9 +40,35 @@ export const invitationAssets = {
   },
   blessing: {
     frame: `${sceneRoot}/blessing-frame.webp`,
-    photo: `${sceneRoot}/formal-photo.webp`,
+    photo: `${sceneRoot}/formal-camera-september.webp`,
     divider: `${sceneRoot}/heart-divider.webp`,
   },
+  gallery: [
+    {
+      id: "rings",
+      src: `${invitationRoot}/gallery/rings-720.webp`,
+      smallSrc: `${invitationRoot}/gallery/rings-480.webp`,
+      alt: "Las manos de Natalia y Gabriel mostrando sus anillos",
+      width: 720,
+      height: 1280,
+    },
+    {
+      id: "embrace",
+      src: `${invitationRoot}/gallery/embrace-720.webp`,
+      smallSrc: `${invitationRoot}/gallery/embrace-480.webp`,
+      alt: "Natalia y Gabriel abrazados al aire libre",
+      width: 720,
+      height: 960,
+    },
+    {
+      id: "heart",
+      src: `${invitationRoot}/gallery/heart-720.webp`,
+      smallSrc: `${invitationRoot}/gallery/heart-480.webp`,
+      alt: "Natalia y Gabriel bajo un corazón iluminado",
+      width: 720,
+      height: 960,
+    },
+  ],
   details: {
     handwrittenPaper: `${sceneRoot}/handwritten-paper.webp`,
     locationFrame: `${sceneRoot}/location-frame.webp`,

@@ -16,6 +16,7 @@ import {
 import { Guest } from "../types";
 import { weddingConfig } from "../config";
 import { invitationAssets } from "../invitationAssets";
+import WeddingPhotoCarousel from "./WeddingPhotoCarousel";
 
 type Attendance = Guest["attendance"];
 
@@ -381,11 +382,14 @@ function CountdownAndGifts({ priority = false, directInitial = false }: { priori
             <StatCard id="countdown-minutes" label="Minutos" value={String(countdown.minutes).padStart(2, "0")} />
             <StatCard id="countdown-seconds" label="Segundos" value={String(countdown.seconds).padStart(2, "0")} />
           </div>
-          <p id="gift-intro" className="gift-intro">
-            Lo más valioso es compartir este momento junto a ustedes.<br />
-            Pero si desean bendecirnos con un detalle, pueden hacerlo por este medio.
-          </p>
         </div>
+
+        <WeddingPhotoCarousel />
+
+        <p id="gift-intro" className="gift-intro">
+          Lo más valioso es compartir este momento junto a ustedes.<br />
+          Pero si desean bendecirnos con un detalle, pueden hacerlo por este medio.
+        </p>
 
         <div id="gift-card" className="gift-card-composition" data-group="gifts">
           <DeferredImage id="gift-card-lace" className="gift-card-lace" src={gifts.card} alt="" rootMargin="0px" priority={priority} />
@@ -472,16 +476,22 @@ export default function DigitalWeddingInvitation({ contentOnly = false }: { cont
   useEffect(() => {
     if (renderFullJourney) return;
 
-    const revealJourney = () => setRenderFullJourney(true);
+    const revealJourney = (event: Event) => {
+      // Let carousel controls finish their click before inserting earlier scenes.
+      if (event.type !== "click" && event.target instanceof Element && event.target.closest("#wedding-gallery")) return;
+      setRenderFullJourney(true);
+    };
     const passiveEvents = ["pointerdown", "touchstart", "wheel"] as const;
     passiveEvents.forEach((eventName) => {
-      window.addEventListener(eventName, revealJourney, { once: true, passive: true, capture: true });
+      window.addEventListener(eventName, revealJourney, { passive: true, capture: true });
     });
-    window.addEventListener("keydown", revealJourney, { once: true, capture: true });
+    window.addEventListener("keydown", revealJourney, { capture: true });
+    window.addEventListener("click", revealJourney);
 
     return () => {
       passiveEvents.forEach((eventName) => window.removeEventListener(eventName, revealJourney, { capture: true }));
       window.removeEventListener("keydown", revealJourney, { capture: true });
+      window.removeEventListener("click", revealJourney);
     };
   }, [renderFullJourney]);
 
