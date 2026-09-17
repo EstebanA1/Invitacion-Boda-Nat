@@ -5,20 +5,20 @@ export const weddingConfig = {
     fullNames: "Natalia Aguayo & Gabriel Figueiroa",
   },
   date: {
-    iso: "2026-11-28T16:30:00-03:00",
+    iso: "2026-11-28T15:00:00-03:00",
     label: "Sábado 28 de Noviembre de 2026",
     shortLabel: "28 de Noviembre 2026",
   },
   ceremony: {
     title: "Ceremonia",
-    time: "14:30 hrs",
+    time: "15:00 hrs",
     place: "IEP. Lagunillas Coronel",
     address: "Confirma la dirección oficial antes de publicar",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=IEP%20Lagunillas%20Coronel",
   },
   reception: {
     title: "Recepción",
-    time: "16:30 hrs",
+    time: "17:00 hrs",
     place: "Verde Ocaso Lounge",
     address: "Confirma la dirección oficial antes de publicar",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Verde%20Ocaso%20Lounge%20Coronel",
