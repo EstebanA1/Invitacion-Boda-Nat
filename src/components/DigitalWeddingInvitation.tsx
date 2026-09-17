@@ -188,10 +188,10 @@ const dietaryOptions = [
 const schedule = [
   { time: weddingConfig.ceremony.time, title: "Ceremonia religiosa", image: program.icons.church },
   { time: weddingConfig.reception.time, title: "Recepción centro de evento", image: program.icons.welcome },
-  { time: "17:00 p.m", title: "Cóctel y brindis con los novios", image: program.icons.toast },
-  { time: "18:15 p.m", title: "Inicio cena del banquete", image: program.icons.dinner },
-  { time: "21:00 p.m", title: "Dinámicas y corte del pastel", image: program.icons.cake },
-  { time: "00:30 a.m", title: "Fin de la celebración", image: program.icons.car },
+  { time: "17:30 hrs", title: "Cóctel y brindis con los novios", image: program.icons.toast },
+  { time: "18:45 hrs", title: "Inicio de cena de banquete", image: program.icons.dinner },
+  { time: "21:30 hrs", title: "Dinámicas y corte de pastel", image: program.icons.cake },
+  { time: "01:00 hrs", title: "Fin de la celebración", image: program.icons.car },
 ];
 
 const locations = [
