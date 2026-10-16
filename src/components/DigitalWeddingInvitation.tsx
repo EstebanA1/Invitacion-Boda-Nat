@@ -273,6 +273,75 @@ function toGuestRow(guest: Guest) {
   };
 }
 
+function createRsvpRequestId() {
+  return typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function verifyRsvpSave(scriptUrl: string, requestId: string, requiresDietRecord: boolean): Promise<boolean> {
+  const checkOnce = () => new Promise<boolean>((resolve, reject) => {
+    const callbackName = `weddingRsvp_${createRsvpRequestId().replace(/-/g, "")}`;
+    const callbackHost = window as unknown as Record<string, unknown>;
+    const script = document.createElement("script");
+    let settled = false;
+
+    const cleanup = () => {
+      window.clearTimeout(timeoutId);
+      delete callbackHost[callbackName];
+      script.remove();
+    };
+    const finish = (result: boolean) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(result);
+    };
+    const fail = (error: Error) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(error);
+    };
+    const timeoutId = window.setTimeout(() => fail(new Error("Tiempo de espera agotado al verificar la respuesta.")), 8000);
+
+    callbackHost[callbackName] = (result: { exists?: boolean }) => finish(result?.exists === true);
+    script.onerror = () => fail(new Error("No se pudo consultar la verificación de Google Sheets."));
+
+    try {
+      const url = new URL(scriptUrl);
+      url.searchParams.set("action", "verify");
+      url.searchParams.set("requestId", requestId);
+      url.searchParams.set("requiresDietRecord", String(requiresDietRecord));
+      url.searchParams.set("callback", callbackName);
+      script.src = url.toString();
+      document.head.appendChild(script);
+    } catch (error) {
+      fail(error instanceof Error ? error : new Error("URL de Apps Script no válida."));
+    }
+  });
+
+  return (async () => {
+    let lastError: Error | null = null;
+    const retryDelays = [300, 700, 1400, 2200];
+
+    for (let attempt = 0; attempt < retryDelays.length; attempt += 1) {
+      try {
+        if (await checkOnce()) return true;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+      }
+
+      if (attempt < retryDelays.length - 1) {
+        await new Promise((resolve) => window.setTimeout(resolve, retryDelays[attempt]));
+      }
+    }
+
+    if (lastError) throw lastError;
+    return false;
+  })();
+}
+
 function readRemoteGuests(scriptUrl: string): Promise<Guest[]> {
   if (!scriptUrl) return Promise.resolve([]);
 
@@ -800,6 +869,7 @@ function RsvpSection({
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
     () => hasCompletedRsvp(invitationType) ? "done" : "idle",
   );
+  const attemptRef = useRef<{ signature: string; requestId: string } | null>(null);
 
   const maxCompanions = invitationType === "2" ? 1 : 0;
 
@@ -823,8 +893,25 @@ function RsvpSection({
 
     setStatus("sending");
 
+    const submissionSignature = JSON.stringify([
+      name.trim(),
+      attendance,
+      attendance === "Asistirá" ? companions : 0,
+      phone.trim(),
+      [...dietary].sort(),
+      details.trim(),
+      invitationType,
+    ]);
+    let attempt = attemptRef.current;
+    if (!attempt || attempt.signature !== submissionSignature) {
+      attempt = { signature: submissionSignature, requestId: createRsvpRequestId() };
+      attemptRef.current = attempt;
+    }
+    const requestId = attempt.requestId;
+    const requiresDietRecord = dietary.length > 0 || Boolean(details.trim());
+
     const guest: Guest = {
-      id: crypto.randomUUID(),
+      id: requestId,
       name: name.trim(),
       attendance,
       companions: attendance === "Asistirá" ? companions : 0,
@@ -846,12 +933,24 @@ function RsvpSection({
       Object.entries(toGuestRow(guest)).forEach(([key, value]) => {
         formData.append(key, String(value));
       });
+      formData.append("requestId", requestId);
 
-      await fetch(weddingConfig.rsvp.scriptUrl, {
-        method: "POST",
-        mode: "no-cors",
-        body: formData,
-      });
+      try {
+        await fetch(weddingConfig.rsvp.scriptUrl, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData,
+        });
+      } catch (error) {
+        // The POST may have reached Apps Script even if the browser lost its response.
+        console.warn("El POST RSVP no confirmó respuesta; se verificará el ID en Google Sheets:", error);
+      }
+
+      const isSaved = await verifyRsvpSave(weddingConfig.rsvp.scriptUrl, requestId, requiresDietRecord);
+      if (!isSaved) {
+        setStatus("error");
+        return;
+      }
 
       onGuestAdded(guest);
       markRsvpAsCompleted(invitationType);
@@ -974,7 +1073,7 @@ function RsvpSection({
 
               {status === "error" && (
                 <p id="rsvp-error" className="form-alert">
-                  No se pudo enviar la respuesta. Revisa tu conexión e inténtalo nuevamente.
+                  No pudimos confirmar el registro. Revisa tu conexión e inténtalo nuevamente; si reintentas sin cambiar los datos, no se duplicará la respuesta.
                 </p>
               )}
 
